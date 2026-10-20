@@ -834,7 +834,7 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
   .ain-card h1{font-family:var(--f-read,serif);font-size:22px;text-align:center;margin:0}
   .ain-card p{margin:0;color:var(--muted,#666);font-size:14px;text-align:center;line-height:1.5}
   .ain-card label{display:grid;gap:6px;font-size:13.5px;color:var(--muted,#666)}
-  .ain-card input{font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;border:1px solid var(--line,#ccc);background:var(--bg,#fff);color:var(--ink,#222)}
+  .ain-card input{-webkit-user-select:text;user-select:text;-webkit-appearance:none;appearance:none;pointer-events:auto;font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;border:1px solid var(--line,#ccc);background:var(--bg,#fff);color:var(--ink,#222)}
   .ain-card button{font:inherit;font-size:16px;padding:13px;border-radius:999px;border:0;background:var(--accent,#3E7560);color:var(--accent-ink,#fff);cursor:pointer}
   .ain-card button[disabled]{opacity:.6}
   .ain-card .msg{min-height:20px;font-size:13.5px;color:var(--danger,#C2554A);text-align:center}
@@ -863,7 +863,7 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
       });
     }
     g.querySelector('.msg').textContent = msg || '';
-    g.querySelector('input').focus();
+    // 아이폰 홈 화면 앱에서는 코드로 미리 포커스를 주면 이후 눌러도 키보드가 안 뜨는 문제가 있어 자동 포커스를 하지 않음
   }
   AIN.signOut = async () => { try { await sb.auth.signOut(); } catch (e) {} try { localStorage.removeItem('ain-member'); } catch (e) {} location.reload(); };
   function whoChip() {
@@ -1431,7 +1431,7 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
   }
 
   /* ================= BROADCAST (아침방송) ================= */
-  const CAST_DAYS = [['월', '영단어'], ['화', '영단어'], ['수', '스토리'], ['목', '스토리'], ['금', '수학']];
+  const CAST_DAYS = [['월', '영단어'], ['화', '영단어'], ['수', '수학'], ['목', '수학'], ['금', '스토리']];
   VIEWS.cast = () => {
     const days = [...new Set(S.broadcasts.map(b => b.date))].sort().reverse();
     const head = pageHead('매일 아침', '아침방송', '월·화는 교재 영단어, 수·목은 EBS 수학 강의, 금요일은 영어 스토리 3편이 올라와요. 스토리는 마음에 드는 걸 골라 들어요.');
@@ -1586,7 +1586,7 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
     const weeks = S.bookpicks.slice().sort((a, b) => (b.startDate || b.id || '').localeCompare(a.startDate || a.id || ''));
     if (!S.shelfWeek || !weeks.find(w => w.id === S.shelfWeek)) S.shelfWeek = weeks[0] ? weeks[0].id : null;
     const wk = weeks.find(w => w.id === S.shelfWeek);
-    const head = pageHead('도구', '양식창고', '매주 월요일, 청소년문학과 비문학에서 마음을 키워 줄 책을 골라 책장에 꽂아 둬요. 책을 누르면 추천 이유와 근거를 볼 수 있어요.');
+    const head = pageHead('도구', '양식창고', '매주 월요일, 청소년문학 10권과 비문학 10권, 마음을 키워 줄 책을 골라 책장에 꽂아 둬요. 책을 누르면 추천 이유와 근거를 볼 수 있어요.');
     const tabs = h('div', { class: 'seg' }, [['week', '이번 주 책장'], ['mine', `내 책장 ${S.mybooks.length ? S.mybooks.length : ''}`]].map(([k, t]) => h('button', { type: 'button', 'aria-pressed': String(S.shelfTab === k), onclick: () => { S.shelfTab = k; render(); } }, t.trim())));
     if (needDb()) return h('div', { class: 'page' }, head, needDb());
     let body;
