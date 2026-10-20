@@ -1324,23 +1324,55 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
   /* ---------- 단어 듣기 플레이어 (교재 QR 단어장과 같은 방식) ---------- */
   const VP = { set: null, tab: 'words', rate: +store.get('ain-prate', 1) || 1, queue: [], running: false, hide: false, el: null };
   /* 미리 녹음한 원어민 음성(단어장마다 한 파일 + 구간표). 녹음이 없을 때만 기기 음성으로 읽어요. */
-  const VA = { audio: null, timer: null, stop: null };
+  const VA = { audio: null, timer: null, stop: null, obj: null };
   function clipOf(text) { const a = VP.set && VP.set.audio; return a && a.map ? a.map[text] : null; }
+  /* 아이폰(사파리)은 구간으로 건너뛴 직후 재생하면 앞부분이 한 번 먼저 나왔다가 다시 처음부터 나오는 일이 있어요.
+     그래서 건너뛰기가 끝날 때까지 소리를 꺼 두었다가(재생 자체는 버튼을 누른 순간 시작해야 아이폰이 허락해 줘요)
+     정확한 자리에 도착한 뒤에 소리를 켜요. 녹음 파일은 통째로 받아 기기 안에서 건너뛰게 해 더 정확하게 해요. */
+  function localizeAudio(au, src) {
+    if (!src || !window.URL || !URL.createObjectURL) return;
+    const id = src.indexOf('/_blob/') === 0 ? src.slice(7) : null;
+    let req; try { req = id && window.AIN && AIN.blobFetch ? AIN.blobFetch(id) : fetch(src); } catch (e) { return; }
+    Promise.resolve(req).then(r => (r && r.ok ? r.blob() : null)).then(b => {
+      if (!b || !b.size || VA.audio !== au) return;
+      const u = URL.createObjectURL(b.type ? b : new Blob([b], { type: 'audio/mp4' }));
+      const swap = () => {
+        if (VA.audio !== au) { URL.revokeObjectURL(u); return; }
+        if (VA.stop || !au.paused) { setTimeout(swap, 400); return; }
+        if (VA.obj) URL.revokeObjectURL(VA.obj);
+        VA.obj = u; au.src = u; try { au.load(); } catch (e) {}
+      };
+      swap();
+    }).catch(() => {});
+  }
   function playClip(text, onend) {
     if (VA.stop) VA.stop();
     const a = VA.audio, seg = clipOf(text);
     const fallback = () => { if (window.speechSynthesis) utter(text, 'en-US', 0.85 * VP.rate, onend); else onend && onend(); };
     if (!a || !seg) { fallback(); return; }
-    let done = false;
-    const tu = () => { if (a.currentTime >= seg[1]) fin(); };
-    const halt = () => { done = true; clearTimeout(VA.timer); a.removeEventListener('timeupdate', tu); try { a.pause(); } catch (e) {} VA.stop = null; };
+    let done = false, live = false, retried = false, wt = 0;
+    const arm = () => { clearTimeout(VA.timer); if (done) return; const from = Math.min(Math.max(a.currentTime, seg[0]), seg[1]); VA.timer = setTimeout(fin, ((seg[1] - from) / VP.rate) * 1000 + 120); };
+    const goLive = () => { if (done || live) return; live = true; clearTimeout(wt); a.muted = false; arm(); };
+    const onSeeked = () => {
+      if (done || live) return;
+      if (!retried && Math.abs(a.currentTime - seg[0]) > 0.15) { retried = true; try { a.currentTime = seg[0]; } catch (e) {} return; }
+      goLive();
+    };
+    const tu = () => { if (live && a.currentTime >= seg[1]) fin(); };
+    const halt = () => { done = true; clearTimeout(VA.timer); clearTimeout(wt); a.removeEventListener('timeupdate', tu); a.removeEventListener('seeked', onSeeked); try { a.pause(); } catch (e) {} a.muted = false; VA.stop = null; };
     const fin = () => { if (done) return; halt(); onend && onend(); };
     VA.stop = halt;
-    try { a.pause(); a.playbackRate = VP.rate; a.currentTime = seg[0]; } catch (e) {}
+    const need = Math.abs(a.currentTime - seg[0]) > 0.02;
+    try { a.pause(); a.playbackRate = VP.rate; } catch (e) {}
     a.addEventListener('timeupdate', tu);
+    if (need) {
+      a.addEventListener('seeked', onSeeked);
+      a.muted = true;
+      try { a.currentTime = seg[0]; } catch (e) {}
+      wt = setTimeout(() => { try { if (Math.abs(a.currentTime - seg[0]) > 0.3) a.currentTime = seg[0]; } catch (e) {} goLive(); }, 2500);
+    }
     const p = a.play();
-    const arm = () => { if (!done) VA.timer = setTimeout(fin, ((seg[1] - a.currentTime) / VP.rate) * 1000 + 80); };
-    if (p && p.then) p.then(arm).catch(() => { if (done) return; halt(); fallback(); }); else arm();
+    if (p && p.then) p.then(() => { if (!need) goLive(); }).catch(() => { if (done) return; halt(); fallback(); }); else if (!need) goLive();
   }
   function vocabStop() { VP.running = false; VP.queue = []; if (VA.stop) VA.stop(); try { speechSynthesis.cancel(); } catch (e) {} if (VP.el) VP.el.querySelectorAll('.on,.playing').forEach(e => e.classList.remove('on', 'playing')); const st = VP.el && VP.el.querySelector('.vp-status'); if (st) st.textContent = ''; }
   function vocabOne(text, el) { vocabStop(); if (el) el.classList.add('on'); playClip(text, () => el && el.classList.remove('on')); }
@@ -1359,10 +1391,10 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
     if (!set) { toast('단어장을 아직 불러오지 못했어요. 잠시 뒤 다시 눌러 주세요.'); return; }
     VP.set = set; VP.tab = 'words';
     VA.audio = null;
-    if (set.audio && set.audio.src) { try { const au = new Audio(); au.preload = 'auto'; AIN.setSrc(au, set.audio.src); if ('preservesPitch' in au) au.preservesPitch = true; VA.audio = au; } catch (e) {} }
+    if (set.audio && set.audio.src) { try { const au = new Audio(); au.preload = 'auto'; AIN.setSrc(au, set.audio.src); if ('preservesPitch' in au) au.preservesPitch = true; VA.audio = au; localizeAudio(au, set.audio.src); } catch (e) {} }
     const wrap = h('div', { class: 'viewer vp', role: 'dialog', 'aria-modal': 'true', 'aria-label': '단어 듣기' });
     VP.el = wrap;
-    const close = () => { vocabStop(); if (VA.audio) { try { VA.audio.removeAttribute('src'); VA.audio.load(); } catch (e) {} } VA.audio = null; wrap.remove(); document.body.style.overflow = ''; VP.el = null; };
+    const close = () => { vocabStop(); if (VA.audio) { try { VA.audio.removeAttribute('src'); VA.audio.load(); } catch (e) {} } VA.audio = null; if (VA.obj) { try { URL.revokeObjectURL(VA.obj); } catch (e) {} VA.obj = null; } wrap.remove(); document.body.style.overflow = ''; VP.el = null; };
     const body = h('div', { class: 'viewer-body vp-body' });
     const tabs = h('div', { class: 'seg' }, [['words', `주요 단어 ${set.words.length}`], ['extra', `추가 단어 ${(set.extra || []).length}`]].map(([k, t]) => h('button', { type: 'button', 'aria-pressed': String(VP.tab === k), onclick: (e) => { vocabStop(); VP.tab = k; tabs.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === e.currentTarget))); draw(); } }, t)));
     const speed = h('div', { class: 'seg' }, [[0.8, '천천히'], [1, '보통'], [1.15, '빠르게']].map(([r, t]) => h('button', { type: 'button', 'aria-pressed': String(VP.rate === r), onclick: (e) => { VP.rate = r; store.set('ain-prate', r); speed.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === e.currentTarget))); } }, t)));
@@ -1400,11 +1432,11 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
     if (!st) { toast('지문을 아직 불러오지 못했어요. 잠시 뒤 다시 눌러 주세요.'); return; }
     vocabStop();
     VP.set = st; VA.audio = null;
-    if (st.audio && st.audio.src) { try { const au = new Audio(); au.preload = 'auto'; AIN.setSrc(au, st.audio.src); if ('preservesPitch' in au) au.preservesPitch = true; VA.audio = au; } catch (e) {} }
+    if (st.audio && st.audio.src) { try { const au = new Audio(); au.preload = 'auto'; AIN.setSrc(au, st.audio.src); if ('preservesPitch' in au) au.preservesPitch = true; VA.audio = au; localizeAudio(au, st.audio.src); } catch (e) {} }
     const wrap = h('div', { class: 'viewer vp', role: 'dialog', 'aria-modal': 'true', 'aria-label': '스토리 듣기' });
     VP.el = wrap;
     const showKo = !!store.get('ain-st-ko', false); wrap.classList.toggle('showko', showKo);
-    const close = () => { vocabStop(); if (VA.audio) { try { VA.audio.removeAttribute('src'); VA.audio.load(); } catch (e) {} } VA.audio = null; wrap.remove(); document.body.style.overflow = ''; VP.el = null; };
+    const close = () => { vocabStop(); if (VA.audio) { try { VA.audio.removeAttribute('src'); VA.audio.load(); } catch (e) {} } VA.audio = null; if (VA.obj) { try { URL.revokeObjectURL(VA.obj); } catch (e) {} VA.obj = null; } wrap.remove(); document.body.style.overflow = ''; VP.el = null; };
     const speed = h('div', { class: 'seg' }, [[0.8, '천천히'], [1, '보통'], [1.15, '빠르게']].map(([r, t]) => h('button', { type: 'button', 'aria-pressed': String(VP.rate === r), onclick: (e) => { VP.rate = r; store.set('ain-prate', r); speed.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === e.currentTarget))); } }, t)));
     const koBtn = h('button', { class: 'btn sm', type: 'button', onclick: () => { const on = !wrap.classList.contains('showko'); wrap.classList.toggle('showko', on); store.set('ain-st-ko', on); koBtn.textContent = on ? '해석 숨기기' : '해석 보기'; } }, showKo ? '해석 숨기기' : '해석 보기');
     const sents = [];
