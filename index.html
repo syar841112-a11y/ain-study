@@ -2082,7 +2082,7 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
     const timerMins = S.logs.filter(l => l.source === 'timer').reduce((a, l) => a + Math.min(l.minutes || 0, l.timerMin || l.minutes || 0), 0);
     const earned = Math.floor(timerMins / 120);
     const greeters = new Set(S.homegreet.map(g => g.by).filter(b => FAMILY.includes(b)));
-    const bonus = greeters.size * 2, spent = S.homeitems.filter(x => x.kind !== 'gift').reduce((a, x) => a + (x.cost || 0), 0), gift = S.homeitems.filter(x => x.kind === 'gift').reduce((a, x) => a + (x.amount || 0), 0);
+    const bonus = greeters.size * 1, spent = S.homeitems.filter(x => x.kind !== 'gift').reduce((a, x) => a + (x.cost || 0), 0), gift = S.homeitems.filter(x => x.kind === 'gift').reduce((a, x) => a + (x.amount || 0), 0);
     return { timerMins, earned, bonus, spent, gift, bal: Math.max(0, earned + bonus + gift - spent), next: 120 - (timerMins % 120), greeters };
   }
   const fp = (p) => { const it = ITEM[p.id]; return (p.rot || 0) % 2 ? [it.d, it.w] : [it.w, it.d]; };
@@ -2246,8 +2246,8 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
     needMe(() => sheetOpen('👋 인사말 남기기', (close) => {
       const others = FAMILY.filter(k => k !== MHS.me); const mem = members(); const first = !S.homegreet.some(g => g.by === MHS.me);
       const to = h('select', null, others.map(k => h('option', { value: k }, mem[k].name + '에게'))); const tx = h('textarea', { rows: '3', maxlength: '80', placeholder: '오늘 하고 싶은 말을 적어 봐요 (80자)', class: 'bc-memo' });
-      return h('form', { class: 'stack', onsubmit: async (e) => { e.preventDefault(); const t = tx.value.trim(); if (!t) return; try { await S.db.collection('homegreet').add({ by: MHS.me, to: to.value, text: t, at: Date.now() }); toast(first ? '첫 인사말 고마워요! 도토리 2개를 선물했어요 🌰🌰' : '인사말을 남겼어요'); close(); } catch (err) { toast('남기지 못했어요'); } } },
-        first ? h('div', { class: 'mh-gift' }, '🎁 첫 인사말을 남기면 도토리 2개를 선물로 받아요!') : null, h('label', { class: 'f' }, '누구에게?', to), h('label', { class: 'f' }, '인사말', tx), h('button', { class: 'btn primary' }, '남기기'));
+      return h('form', { class: 'stack', onsubmit: async (e) => { e.preventDefault(); const t = tx.value.trim(); if (!t) return; try { await S.db.collection('homegreet').add({ by: MHS.me, to: to.value, text: t, at: Date.now() }); toast(first ? '첫 인사말 고마워요! 도토리 1개를 선물했어요 🌰' : '인사말을 남겼어요'); close(); } catch (err) { toast('남기지 못했어요'); } } },
+        first ? h('div', { class: 'mh-gift' }, '🎁 첫 인사말을 남기면 도토리 1개를 선물로 받아요!') : null, h('label', { class: 'f' }, '누구에게?', to), h('label', { class: 'f' }, '인사말', tx), h('button', { class: 'btn primary' }, '남기기'));
     }));
   }
   function openMember(k) {
@@ -2295,7 +2295,7 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
         msgs.length ? h('div', { class: 'mh-log' }, msgs.map(m => h('div', { class: 'mh-msg' + (m.by === MHS.me ? ' me' : '') }, h('small', null, `${(mem[m.by] || {}).name || m.by} · ${new Date(m.at).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: 'numeric', minute: '2-digit' })}`), h('span', null, m.text)))) : h('p', { class: 'meta' }, '첫 말풍선을 띄워 봐요. 최근 이틀 동안의 마지막 말이 미니미 위에 떠 있어요.'));
     } else {
       const gs = S.homegreet.slice().sort((a, b) => (b.at || 0) - (a.at || 0)).slice(0, 30); const A = acorns();
-      body = h('div', { class: 'stack', style: 'gap:10px' }, FAMILY.some(k => !A.greeters.has(k)) ? h('div', { class: 'mh-gift' }, `🎁 아직 첫 인사말을 안 남긴 사람: ${FAMILY.filter(k => !A.greeters.has(k)).map(k => mem[k].name).join(', ')} — 처음 남기면 도토리 2개 선물!`) : null,
+      body = h('div', { class: 'stack', style: 'gap:10px' }, FAMILY.some(k => !A.greeters.has(k)) ? h('div', { class: 'mh-gift' }, `🎁 아직 첫 인사말을 안 남긴 사람: ${FAMILY.filter(k => !A.greeters.has(k)).map(k => mem[k].name).join(', ')} — 처음 남기면 도토리 1개 선물!`) : null,
         h('button', { class: 'btn primary', type: 'button', onclick: openGreet }, '👋 인사말 남기기'),
         gs.length ? h('div', { class: 'mh-log' }, gs.map(g => h('div', { class: 'mh-greet' }, h('small', null, `${(mem[g.by] || {}).name || g.by} → ${(mem[g.to] || {}).name || g.to}`), h('span', null, g.text)))) : null);
     }
