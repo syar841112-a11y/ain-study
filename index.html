@@ -975,7 +975,17 @@ input.wt-in { font-size: 18px; min-height: 48px; padding: 10px 12px; width: 100%
   };
 
   /* ---------- 홈 화면 앱(PWA) ---------- */
-  if ('serviceWorker' in navigator) window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+  if ('serviceWorker' in navigator) window.addEventListener('load', () => {
+    const hadCtl = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      // 앱을 다시 화면에 띄울 때마다 새 버전이 있는지 확인
+      document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') reg.update().catch(() => {}); });
+    }).catch(() => {});
+    // 새 버전이 설치되면, 시험·뷰어 같은 창이 열려 있지 않을 때 한 번 새로고침해 바로 반영
+    let reloaded = false;
+    const tryReload = () => { if (reloaded) return; if (document.querySelector('.viewer, .scrim, .ain-gate')) { setTimeout(tryReload, 5000); return; } reloaded = true; location.reload(); };
+    navigator.serviceWorker.addEventListener('controllerchange', () => { if (hadCtl) tryReload(); });
+  });
 })();
 
 </script>
