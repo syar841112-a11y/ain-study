@@ -1146,7 +1146,7 @@ input.wt-in { font-size: 18px; min-height: 48px; padding: 10px 12px; width: 100%
         h('div', { class: 'panel-head' }, h('h2', null, '📰 오늘의 시사'), h('button', { class: 'btn sm ghost', type: 'button', onclick: () => go('news') }, '전체 보기')),
         arts.length ? h('div', { class: 'articles' }, arts.slice(0, 2).map(articleCard)) : empty('오늘의 글을 준비 중이에요', '매일 아침 사회·경제·문화·스포츠 분야의 읽을거리가 올라와요.')),
       h('section', { class: 'stack' }, h('h2', null, '바로가기'),
-        h('div', { class: 'quick' }, ['books', 'homework', 'cast', 'news', 'shelf', 'rest', 'steps', 'dict', 'timer', 'minihome'].map(id => MENUS.find(x => x.id === id)).map(m => h('button', { type: 'button', onclick: () => go(m.id) }, h('span', { class: 'emo', 'aria-hidden': 'true' }, m.emo), h('b', null, m.name), h('small', null, QUICK_DESC[m.id]))))));
+        h('div', { class: 'quick' }, QUICK_MENUS().map(m => h('button', { type: 'button', onclick: () => go(m.id) }, h('span', { class: 'emo', 'aria-hidden': 'true' }, m.emo), h('b', null, m.name), h('small', null, QUICK_DESC[m.id]))))));
   };
   function photoSlot(now) {
     const days = Math.floor((now.getTime() - now.getTimezoneOffset() * 60000) / 864e5);
@@ -1190,7 +1190,10 @@ input.wt-in { font-size: 18px; min-height: 48px; padding: 10px 12px; width: 100%
     wrap.append(h('div', { class: 'date' }, now.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'long' })), h('h1', null, '사랑하는 아빠딸 ❤️'), h('p', null, msg));
     return wrap;
   }
-  const QUICK_DESC = { books: '과목별 정식 교재', homework: '아빠가 낸 숙제', steps: '공부 달력과 통계', timer: '공부 시간 재기', cast: '영단어·스토리·수학', news: '비문학 읽을거리', dict: '단어·숙어 찾기', shelf: '이번 주 추천 책장', minihome: '가족 미니홈피', rest: '쉬는 시간 음악' };
+  /* 바로가기: 정해 둔 순서 + 새로 생긴 메뉴는 빠짐없이 자동으로 덧붙임 */
+  const QUICK_ORDER = ['books', 'wordtest', 'homework', 'cast', 'news', 'shelf', 'rest', 'steps', 'dict', 'timer', 'minihome'];
+  const QUICK_MENUS = () => [...QUICK_ORDER.map(id => MENUS.find(x => x.id === id)).filter(Boolean), ...MENUS.filter(m => m.id !== 'home' && !QUICK_ORDER.includes(m.id))];
+  const QUICK_DESC = { wordtest: 'TOEFL·VOCA 단어 시험', books: '과목별 정식 교재', homework: '아빠가 낸 숙제', steps: '공부 달력과 통계', timer: '공부 시간 재기', cast: '영단어·스토리·수학', news: '비문학 읽을거리', dict: '단어·숙어 찾기', shelf: '이번 주 추천 책장', minihome: '가족 미니홈피', rest: '쉬는 시간 음악' };
   const fmtMinParts = (m) => { m = Math.round(m || 0); if (m < 60) return [String(m), '분']; return [String(Math.floor(m / 60)) + ':' + pad(m % 60), '시간']; };
   const kpi = (label, [v, unit]) => h('div', { class: 'kpi' }, h('span', null, label), h('b', null, v, h('small', null, unit)));
   function latestBy(arr) { if (!arr.length) return []; const sorted = arr.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (a.order || 0) - (b.order || 0)); const top = sorted[0].date; return sorted.filter(x => x.date === top); }
