@@ -2476,13 +2476,14 @@ input.wt-in { font-size: 18px; min-height: 48px; padding: 10px 12px; width: 100%
   const splitAns = (s) => String(s || '').split(/[,;/·]|\s{2,}/).map(x => x.trim()).filter(Boolean);
   function wtAnswers(type, it) { if (Array.isArray(it.accept) && it.accept.length) return it.accept; return wtType(type).a === 'word' ? [it.word] : splitAns(it.ko); }
   const normEn = (s) => String(s || '').toLowerCase().replace(/[’‘`´]/g, "'").replace(/[.!?]+$/, '').replace(/\s+/g, ' ').trim();
-  const normKo = (s) => String(s || '').replace(/\(.*?\)|\[.*?\]|<.*?>/g, '').replace(/[~\s.,!?'"“”‘’…\-]/g, '').trim();
+  const normKo = (s) => String(s || '').toLowerCase().replace(/대해서/g, '대해').replace(/\(.*?\)|\[.*?\]|<.*?>/g, '').replace(/[~\s.,!?'"“”‘’…\-]/g, '').trim();
   const KO_END = /(하는것|하는|하기|하다|하게|하여|해서|한다|함|한|히|되다|되는|되어|된|됨|적인|적으로|스러운|스럽다|있는|이다|을|를|의)$/;
   const stemKo = (s) => { let x = normKo(s); for (let i = 0; i < 2; i++) { const y = x.replace(KO_END, ''); if (y === x || y.length < 1) break; x = y; } return x; };
   /* 뜻 채점: 띄어쓰기·괄호 설명·'~하다/~한' 같은 끝말은 달라도 정답. 비슷하지만 확실하지 않으면 '확인 필요'. */
   function gradeKo(given, answers) {
     const parts = splitAns(given); if (!parts.length) return 'wrong';
-    const A = answers.map(a => [normKo(a), stemKo(a)]).filter(a => a[0]);
+    const noLead = (a) => String(a).replace(/^\s*~\s*(에게|에서|으로|에|을|를|와|과|가|이|로|의|은|는)?\s*/, '');
+    const A = answers.flatMap(a => [a, noLead(a)]).map(a => [normKo(a), stemKo(a)]).filter(a => a[0]);
     let check = false;
     for (const p of parts) {
       const n = normKo(p), s = stemKo(p); if (!n) continue;
