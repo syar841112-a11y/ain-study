@@ -632,6 +632,78 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
 }
 @media (max-width: 820px) { .scene { padding: 22px 20px; min-height: 180px; } .ph-badge { width: 48px; height: 48px; font-size: 24px; } }
 
+
+/* 단어 시험 */
+.wt { grid-template-rows: auto minmax(0, 1fr) auto; }
+.wt-bar { flex-wrap: wrap; }
+.wt-clock, .wt-prog { font-family: var(--f-num); font-size: 13px; color: var(--muted); background: var(--sunken); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+.wt-body { justify-items: stretch; }
+.wt-list, .wt-rlist { list-style: none; padding: 0; margin: 0 auto; display: grid; gap: 10px; max-width: 760px; width: 100%; }
+.wt-item { display: grid; grid-template-columns: 30px minmax(0, 1fr) minmax(0, 1.15fr); gap: 12px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; }
+.wt-n { font-family: var(--f-num); color: var(--faint); font-size: 13px; text-align: center; }
+.wt-q { font-weight: 700; font-size: 17px; line-height: 1.4; overflow-wrap: anywhere; }
+.wt-q.en, .wt .en, .wt-card .en, .wt-top .en { font-family: var(--f-read); }
+.wt-q.en { font-size: 21px; }
+.wt-q small { display: block; font-weight: 400; font-size: 12px; color: var(--faint); font-family: var(--f-ui); }
+input.wt-in { font-size: 18px; min-height: 48px; padding: 10px 12px; width: 100%; -webkit-user-select: text; user-select: text; }
+.wt-foot { padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); background: var(--surface); display: flex; justify-content: center; }
+.wt-foot .btn { min-width: 240px; justify-content: center; }
+.wt-res { display: grid; gap: 16px; max-width: 760px; width: 100%; margin: 0 auto; }
+.wt-hero { display: flex; gap: 18px; align-items: center; justify-content: center; flex-wrap: wrap; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 18px; }
+.wt-score { font-family: var(--f-read); font-size: 60px; font-weight: 700; line-height: 1; color: var(--accent); }
+.wt-score small { font-size: 20px; margin-left: 2px; }
+.wt-praise { background: var(--sun-soft); border-radius: 20px; padding: 18px; text-align: center; display: grid; gap: 4px; justify-items: center; }
+.wt-praise.soft { background: var(--sky-soft); }
+.wt-praise b { font-size: 18px; }
+.wt-praise p { margin: 0; }
+.wt-praise-emo { font-size: 44px; line-height: 1; animation: wt-pop .7s ease-out; }
+@keyframes wt-pop { 0% { transform: scale(.3); opacity: 0; } 70% { transform: scale(1.15); } 100% { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .wt-praise-emo { animation: none; } }
+.wt-r { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 10px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; }
+.wt-r.wrong { border-color: color-mix(in srgb, var(--danger) 40%, var(--line)); }
+.wt-r.check { border-color: color-mix(in srgb, var(--warn) 55%, var(--line)); }
+.wt-mark { font-size: 18px; line-height: 1.5; text-align: center; }
+.wt-given { font-size: 14px; color: var(--muted); overflow-wrap: anywhere; }
+.wt-given .x { color: var(--danger); text-decoration: line-through; }
+.wt-r.check .wt-given span { color: var(--warn); }
+.wt-right { font-size: 14px; color: var(--ok); overflow-wrap: anywhere; }
+.wt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+.wt-card { display: grid; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; align-content: start; min-width: 0; }
+.wt-card.wn .wt-q.en { font-size: 20px; }
+.wt-card.done { opacity: .85; }
+.wt-memo { font-size: 14px; min-height: 56px; }
+.wt-dots { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.wt-dots i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+.wt-dots i.on { background: var(--ok); }
+.wt-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+.wt-kpi { background: var(--sunken); border-radius: 14px; padding: 12px 14px; display: grid; gap: 2px; }
+.wt-kpi span { font-size: 12px; color: var(--muted); }
+.wt-kpi b { font-family: var(--f-num); font-size: 24px; line-height: 1.2; }
+.wt-kpi small { font-size: 11px; color: var(--faint); }
+.wt-trend { width: 100%; height: auto; display: block; margin-top: 6px; }
+.wt-trend .g { stroke: var(--line); stroke-width: 1; }
+.wt-trend .goal { stroke: var(--sun); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.wt-trend .l { fill: var(--faint); font-size: 11px; font-family: var(--f-num); }
+.wt-trend .goal-l { fill: var(--warn); }
+.wt-trend .ln { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; }
+.wt-trend .pt { fill: var(--surface); stroke: var(--accent); stroke-width: 2; }
+.wt-trend .pt.good { fill: var(--sun); stroke: var(--warn); }
+.wt-top { margin: 0; padding-left: 22px; display: grid; gap: 6px; }
+.wt-top li { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.wt-table { display: grid; gap: 2px; }
+.wt-tr { display: grid; grid-template-columns: minmax(0, 2fr) 0.6fr 0.8fr minmax(0, 1.6fr); gap: 8px; align-items: center; padding: 6px 4px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.wt-tr.th { font-size: 12px; color: var(--muted); }
+.wt-hist { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 14px; padding: 10px 14px; cursor: pointer; font: inherit; color: inherit; }
+.wt-hist b { font-family: var(--f-num); min-width: 46px; }
+.wt-pend { border-color: color-mix(in srgb, var(--warn) 55%, var(--line)); }
+@media (max-width: 560px) {
+  .wt-item { grid-template-columns: 26px minmax(0, 1fr); }
+  .wt-item .wt-in { grid-column: 1 / -1; }
+  .wt-r { grid-template-columns: 26px minmax(0, 1fr); }
+  .wt-r > .row { grid-column: 1 / -1; }
+  .wt-tr { grid-template-columns: minmax(0, 1.6fr) 0.5fr 0.7fr minmax(0, 1.4fr); font-size: 13px; }
+  .wt-foot .btn { width: 100%; }
+}
 </style>
 </head>
 <body>
@@ -646,6 +718,7 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
     <symbol id="i-dict" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/><path d="M9 8h6"/></symbol>
     <symbol id="i-shelf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 20V8h3v12M10 20V5h3v15"/><path d="m15 8.5 2.8-.8 3.2 11.5-2.8.8z"/></symbol>
     <symbol id="i-music" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></symbol>
+    <symbol id="i-test" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="m8.5 9 1.5 1.5L13 7.5"/><path d="M8.5 15h7"/></symbol>
     <symbol id="i-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></symbol>
     <symbol id="i-steps" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><path d="M8 14h2M12 14h2M16 14h0M8 17h2"/></symbol>
     <symbol id="i-timer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></symbol>
@@ -954,6 +1027,7 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
     { id: 'books', name: '교재창고', icon: 'i-books', group: 1, emo: '📚', b: 'var(--sky-soft)' },
     { id: 'homework', name: '용선생 한마디', icon: 'i-pen', group: 1, emo: '✏️', b: 'var(--rose-soft)' },
     { id: 'cast', name: '아침방송', icon: 'i-radio', group: 1, emo: '📻', b: 'var(--sky-soft)' },
+    { id: 'wordtest', name: '단어 시험', icon: 'i-test', group: 1, emo: '📝', b: 'var(--accent-soft)' },
     { id: 'news', name: '오늘의 시사', icon: 'i-news', group: 1, emo: '📰', b: 'var(--sun-soft)' },
     { id: 'shelf', name: '양식창고', icon: 'i-shelf', group: 1, emo: '📖', b: 'var(--rose-soft)' },
     { id: 'rest', name: '휴식창고', icon: 'i-music', group: 1, emo: '🎧', b: 'var(--accent-soft)' },
@@ -967,7 +1041,7 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
   /* ---------- state ---------- */
   const S = {
     view: 'home', db: null, assets: null, downloads: null, canEdit: false, ready: false,
-    subjects: [], materials: [], backgrounds: [], vocabsets: [], stories: [], broadcasts: [], articles: [], bookpicks: [], mybooks: [], home: [], homeitems: [], homechat: [], homegreet: [], playlists: [], homework: [], logs: [], words: [],
+    subjects: [], materials: [], backgrounds: [], vocabsets: [], stories: [], broadcasts: [], articles: [], bookpicks: [], mybooks: [], home: [], homeitems: [], homechat: [], homegreet: [], playlists: [], homework: [], logs: [], words: [], wordtests: [], testresults: [], wrongnotes: [],
     bookFilter: 'all', bookQuery: '', newsSection: '전체', shelfTab: 'week', shelfWeek: null,
     calMonth: (() => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1); })(), calDay: today(), hwTab: 'open'
   };
@@ -2114,7 +2188,8 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
     const timerMins = S.logs.filter(l => l.source === 'timer').reduce((a, l) => a + Math.min(l.minutes || 0, l.timerMin || l.minutes || 0), 0);
     const earned = Math.floor(timerMins / 120);
     const greeters = new Set(S.homegreet.map(g => g.by).filter(b => FAMILY.includes(b)));
-    const bonus = greeters.size * 1, spent = S.homeitems.filter(x => x.kind !== 'gift').reduce((a, x) => a + (x.cost || 0), 0), gift = S.homeitems.filter(x => x.kind === 'gift').reduce((a, x) => a + (x.amount || 0), 0);
+    const testBonus = new Set(S.testresults.filter(r => r.kind === 'full' && r.total > 0 && r.correct / r.total >= 0.95).map(r => r.testId)).size;
+    const bonus = greeters.size * 1 + testBonus, spent = S.homeitems.filter(x => x.kind !== 'gift').reduce((a, x) => a + (x.cost || 0), 0), gift = S.homeitems.filter(x => x.kind === 'gift').reduce((a, x) => a + (x.amount || 0), 0);
     return { timerMins, earned, bonus, spent, gift, bal: Math.max(0, earned + bonus + gift - spent), next: 120 - (timerMins % 120), greeters };
   }
   const fp = (p) => { const it = ITEM[p.id]; return (p.rot || 0) % 2 ? [it.d, it.w] : [it.w, it.d]; };
@@ -2388,6 +2463,288 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
     { t: 'Jazz Café', k: '재즈', q: 'jazz cafe playlist', a: '#2B1D14', b: '#C07A45' }
   ];
   const ytm = (q) => 'https://music.youtube.com/search?q=' + encodeURIComponent(q);
+  /* ================= 단어 시험 (TOEFL: 단어→뜻 / 능률 VOCA: 뜻→스펠링) ================= */
+  const WT_TYPES = [
+    { id: 'toefl', name: 'TOEFL 단어', ask: '영어 단어를 보고 뜻을 적어요', q: 'word', a: 'ko' },
+    { id: 'voca', name: '능률 VOCA', ask: '뜻을 보고 영어 스펠링을 적어요', q: 'ko', a: 'word' }
+  ];
+  const wtType = (id) => WT_TYPES.find(t => t.id === id) || WT_TYPES[0];
+  const WT = { type: store.get('ain-wt-type', 'toefl'), tab: 'tests' };
+  const WHO = { ain: '아인이', dad: '아빠', mom: '엄마' };
+  const wtMe = () => (window.AIN && AIN.member) || (typeof MHS !== 'undefined' && MHS.me) || 'ain';
+  const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const splitAns = (s) => String(s || '').split(/[,;/·]|\s{2,}/).map(x => x.trim()).filter(Boolean);
+  function wtAnswers(type, it) { if (Array.isArray(it.accept) && it.accept.length) return it.accept; return wtType(type).a === 'word' ? [it.word] : splitAns(it.ko); }
+  const normEn = (s) => String(s || '').toLowerCase().replace(/[’‘`´]/g, "'").replace(/[.!?]+$/, '').replace(/\s+/g, ' ').trim();
+  const normKo = (s) => String(s || '').replace(/\(.*?\)|\[.*?\]|<.*?>/g, '').replace(/[~\s.,!?'"“”‘’…\-]/g, '').trim();
+  const KO_END = /(하는것|하는|하기|하다|하게|하여|해서|한다|함|한|히|되다|되는|되어|된|됨|적인|적으로|스러운|스럽다|있는|이다|을|를|의)$/;
+  const stemKo = (s) => { let x = normKo(s); for (let i = 0; i < 2; i++) { const y = x.replace(KO_END, ''); if (y === x || y.length < 1) break; x = y; } return x; };
+  /* 뜻 채점: 띄어쓰기·괄호 설명·'~하다/~한' 같은 끝말은 달라도 정답. 비슷하지만 확실하지 않으면 '확인 필요'. */
+  function gradeKo(given, answers) {
+    const parts = splitAns(given); if (!parts.length) return 'wrong';
+    const A = answers.map(a => [normKo(a), stemKo(a)]).filter(a => a[0]);
+    let check = false;
+    for (const p of parts) {
+      const n = normKo(p), s = stemKo(p); if (!n) continue;
+      for (const [an, as] of A) {
+        if (n === an || (s && s === as)) return 'ok';
+        if (s.length >= 2 && as.length >= 2 && (an.includes(s) || n.includes(as))) check = true;
+      }
+    }
+    return check ? 'check' : 'wrong';
+  }
+  /* 스펠링 채점: 대소문자·앞뒤 공백만 무시하고 철자는 정확히 */
+  function gradeEn(given, answers) { const g = normEn(given); if (!g) return 'wrong'; return answers.some(a => normEn(a) === g) ? 'ok' : 'wrong'; }
+  function wtScore(answers) { const total = answers.length, correct = answers.filter(a => a.ok === 'ok').length, check = answers.filter(a => a.ok === 'check').length; return { total, correct, check, score: total ? Math.round(correct / total * 100) : 0 }; }
+  const wtQualifies = (r) => r.kind === 'full' && r.total > 0 && r.correct / r.total >= 0.95;
+  const wtRewardedIds = () => new Set(S.testresults.filter(wtQualifies).map(r => r.testId));
+  const wtDraftKey = (id) => 'ain-wt-draft-' + id;
+  const wnId = (type, word) => type + '-' + (String(word || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60) || Date.now().toString(36));
+  const PRAISE = [
+    '와, 거의 다 맞혔어! 꾸준히 외운 게 그대로 보여 🎉',
+    '대단해! 이 정도면 이 단어들은 이제 아인이 거야 ✨',
+    '완벽에 가까운 점수! 오늘 공부한 보람이 있지? 👏',
+    '최고야! 어려운 단어도 척척, 아빠 엄마가 깜짝 놀라겠다 🌟',
+    '멋져! 집중해서 푼 게 점수로 나왔어. 스스로를 칭찬해 줘 💛'
+  ];
+
+  /* ---------- 시험 화면 ---------- */
+  function openWordTest(test, retry) {
+    const t = wtType(test.type), items = test.items || [];
+    if (!items.length) { toast('문제가 없는 시험지예요'); return; }
+    const key = retry ? null : wtDraftKey(test.id);
+    let draft = key ? store.get(key, null) : null;
+    if (!draft || !Array.isArray(draft.order) || draft.order.length !== items.length) draft = { order: shuffle(items.map((_, i) => i)), answers: {}, startedAt: Date.now() };
+    const save = () => { if (key) store.set(key, draft); };
+    save();
+    const wrap = h('div', { class: 'viewer wt', role: 'dialog', 'aria-modal': 'true', 'aria-label': test.title });
+    const prog = h('span', { class: 'wt-prog' }), clock = h('span', { class: 'wt-clock' });
+    const filled = () => draft.order.filter(i => (draft.answers[i] || '').trim()).length;
+    const upd = () => { prog.textContent = `${filled()} / ${items.length} 작성`; };
+    const tick = () => { const s = Math.floor((Date.now() - draft.startedAt) / 1000); clock.textContent = `⏱ ${Math.floor(s / 60)}:${pad(s % 60)}`; };
+    const iv = setInterval(tick, 1000); tick();
+    const close = () => { clearInterval(iv); wrap.remove(); document.body.style.overflow = ''; };
+    const list = h('ol', { class: 'wt-list' }, draft.order.map((i, k) => {
+      const it = items[i];
+      const inp = h('input', { type: 'text', class: 'wt-in', value: draft.answers[i] || '', lang: t.a === 'word' ? 'en' : 'ko', autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'false', enterkeyhint: 'next', 'aria-label': `${k + 1}번 답`, placeholder: t.a === 'word' ? '스펠링' : '뜻',
+        oninput: (e) => { draft.answers[i] = e.target.value; save(); upd(); },
+        onkeydown: (e) => { if (e.key === 'Enter') { e.preventDefault(); const nx = list.querySelectorAll('.wt-in')[k + 1]; if (nx) nx.focus(); else e.target.blur(); } } });
+      return h('li', { class: 'wt-item' }, h('span', { class: 'wt-n' }, k + 1),
+        h('div', { class: 'wt-q' + (t.q === 'word' ? ' en' : '') }, t.q === 'word' ? it.word : it.ko, t.q === 'word' && it.pos ? h('small', null, it.pos) : null), inp);
+    }));
+    const submit = async (btn) => {
+      if (!S.db) { toast('아직 연결 중이에요. 잠시 뒤 다시 눌러 주세요'); return; }
+      if (btn) { btn.disabled = true; btn.textContent = '채점하는 중…'; }
+      const fin = Date.now();
+      const answers = draft.order.map(i => {
+        const it = items[i], given = (draft.answers[i] || '').trim(), acc = wtAnswers(test.type, it);
+        const ok = t.a === 'word' ? gradeEn(given, acc) : gradeKo(given, acc);
+        const a = { word: it.word || '', ko: it.ko || '', given, ok, accept: acc };
+        if (it.n) a.n = it.n; if (it.noteId) a.noteId = it.noteId;
+        return a;
+      });
+      const res = { testId: test.id, type: test.type, title: test.title, book: test.book || '', kind: retry ? 'retry' : 'full', by: wtMe(), startedAt: draft.startedAt, finishedAt: fin, durationSec: Math.round((fin - draft.startedAt) / 1000), answers, ...wtScore(answers) };
+      const before = wtRewardedIds();
+      let id;
+      try { id = (await S.db.collection('testresults').add(res)).id; }
+      catch (e) { toast('결과를 저장하지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요'); if (btn) { btn.disabled = false; btn.textContent = '종료하고 채점하기'; } return; }
+      if (key) { try { localStorage.removeItem(key); } catch (e) {} }
+      await wtUpdateNotes(res);
+      close();
+      openWordResult({ ...res, id }, { fresh: true, newReward: wtQualifies(res) && !before.has(res.testId) });
+    };
+    const finBtn = h('button', { class: 'btn primary lg', type: 'button', onclick: (e) => {
+      const blanks = items.length - filled(), b = e.currentTarget;
+      if (!blanks) { submit(b); return; }
+      sheetOpen('시험을 끝낼까요?', (closeS) => h('div', { class: 'stack' }, h('p', null, `아직 빈칸이 ${blanks}개 있어요. 빈칸은 틀린 것으로 채점돼요.`),
+        h('div', { class: 'row' }, h('button', { class: 'btn', type: 'button', onclick: closeS }, '더 풀래요'), h('button', { class: 'btn primary', type: 'button', onclick: () => { closeS(); submit(b); } }, '그래도 끝내기'))));
+    } }, '종료하고 채점하기');
+    upd();
+    wrap.append(
+      h('div', { class: 'viewer-bar wt-bar' },
+        h('button', { class: 'btn sm', type: 'button', onclick: () => { close(); if (key) toast('적은 답은 저장돼 있어요. 다시 열면 이어서 풀 수 있어요'); } }, '나가기'),
+        h('div', { class: 'vt' }, test.title, h('small', null, [retry ? '오답 다시 보기' : t.name, t.ask].join(' · '))),
+        clock, prog),
+      h('div', { class: 'viewer-body wt-body' }, list),
+      h('div', { class: 'wt-foot' }, finBtn));
+    document.body.append(wrap); document.body.style.overflow = 'hidden';
+  }
+
+  /* ---------- 오답노트 기록 ---------- */
+  async function wtUpdateNotes(res) {
+    for (const a of res.answers) {
+      if (a.ok === 'check') continue;
+      const id = a.noteId || wnId(res.type, a.word), cur = S.wrongnotes.find(x => x.id === id);
+      try {
+        if (a.ok === 'wrong') {
+          await S.db.collection('wrongnotes').doc(id).set({ type: res.type, word: a.word, ko: a.ko, accept: a.accept || null, testId: cur ? cur.testId : res.testId, testTitle: cur ? cur.testTitle : res.title,
+            wrongCount: (cur ? cur.wrongCount || 0 : 0) + 1, streak: 0, status: 'open', lastGiven: a.given, lastWrongAt: res.finishedAt, firstWrongAt: cur ? cur.firstWrongAt || res.finishedAt : res.finishedAt, memo: cur ? cur.memo || '' : '' });
+        } else if (cur && cur.status !== 'done') {
+          const streak = (cur.streak || 0) + 1;
+          await S.db.collection('wrongnotes').doc(id).update({ streak, status: streak >= 2 ? 'done' : 'open', doneAt: streak >= 2 ? res.finishedAt : null, lastRightAt: res.finishedAt });
+        }
+      } catch (e) {}
+    }
+  }
+  /* 아빠가 '확인 필요'나 오답을 직접 판정 */
+  async function wtJudge(res, idx, ok) {
+    const answers = res.answers.map((a, i) => i === idx ? { ...a, ok: ok ? 'ok' : 'wrong', judged: true } : a);
+    const next = { ...stripId(res), answers, ...wtScore(answers) };
+    try { await S.db.collection('testresults').doc(res.id).set(next); } catch (e) { toast('바꾸지 못했어요'); return null; }
+    const a = answers[idx];
+    if (ok) {
+      const test = S.wordtests.find(x => x.id === res.testId);
+      if (test && a.given) {
+        const items = test.items.map(it => (it.word === a.word && it.ko === a.ko) ? { ...it, accept: Array.from(new Set([...wtAnswers(test.type, it), a.given])) } : it);
+        try { await S.db.collection('wordtests').doc(test.id).update({ items }); } catch (e) {}
+      }
+      const nid = a.noteId || wnId(res.type, a.word), cur = S.wrongnotes.find(x => x.id === nid);
+      if (cur && res.answers[idx].ok === 'wrong') { try { if ((cur.wrongCount || 1) <= 1) await S.db.collection('wrongnotes').doc(nid).delete(); else await S.db.collection('wrongnotes').doc(nid).update({ wrongCount: cur.wrongCount - 1 }); } catch (e) {} }
+    } else if (res.answers[idx].ok !== 'wrong') await wtUpdateNotes({ ...res, answers: [a] });
+    return { ...next, id: res.id };
+  }
+
+  /* ---------- 결과 화면 ---------- */
+  function openWordResult(res, opt = {}) {
+    const t = wtType(res.type);
+    const wrap = h('div', { class: 'viewer wt', role: 'dialog', 'aria-modal': 'true', 'aria-label': '시험 결과' });
+    const body = h('div', { class: 'viewer-body wt-body' });
+    const close = () => { wrap.remove(); document.body.style.overflow = ''; };
+    const draw = () => {
+      const qual = wtQualifies(res), pending = res.check > 0, couldQual = res.kind === 'full' && pending && (res.correct + res.check) / res.total >= 0.95;
+      const praise = qual ? h('div', { class: 'wt-praise' },
+          h('div', { class: 'wt-praise-emo', 'aria-hidden': 'true' }, opt.newReward ? '🌰' : '🏆'),
+          h('b', null, opt.newReward ? '도토리 1개를 받았어요!' : (opt.fresh ? '정답률 95% 이상! (이 시험지 도토리는 이미 받았어요)' : '정답률 95% 이상 달성')),
+          h('p', null, PRAISE[(res.finishedAt || 0) % PRAISE.length]))
+        : couldQual ? h('div', { class: 'wt-praise soft' }, h('b', null, '거의 다 왔어요!'), h('p', null, `확인이 필요한 답 ${res.check}개를 아빠가 맞다고 해 주면 95%를 넘어 도토리를 받을 수 있어요.`))
+        : res.kind === 'full' ? h('p', { class: 'meta', style: 'text-align:center' }, '정답률 95% 이상이면 도토리 1개를 받아요. 틀린 단어는 오답노트에서 다시 연습해 봐요!') : null;
+      const rows = res.answers.map((a, i) => {
+        const prompt = t.q === 'word' ? a.word : a.ko, right = t.a === 'word' ? a.word : (a.accept && a.accept.length ? a.accept.join(', ') : a.ko);
+        const mark = a.ok === 'ok' ? '⭕' : a.ok === 'check' ? '❔' : '❌';
+        const judge = S.canEdit && a.ok !== 'ok' ? h('div', { class: 'row', style: 'gap:4px' },
+          h('button', { class: 'btn sm', type: 'button', onclick: async () => { const r = await wtJudge(res, i, true); if (r) { res = r; draw(); toast('정답으로 인정했어요. 다음부터 이 답도 정답 처리돼요'); } } }, '정답 인정'),
+          a.ok === 'check' ? h('button', { class: 'btn sm ghost danger', type: 'button', onclick: async () => { const r = await wtJudge(res, i, false); if (r) { res = r; draw(); toast('오답으로 처리하고 오답노트에 넣었어요'); } } }, '오답 처리') : null) : null;
+        return h('li', { class: 'wt-r ' + a.ok },
+          h('span', { class: 'wt-mark', 'aria-label': a.ok === 'ok' ? '정답' : a.ok === 'check' ? '확인 필요' : '오답' }, mark),
+          h('div', { style: 'min-width:0' },
+            h('div', { class: 'wt-q' + (t.q === 'word' ? ' en' : '') }, i + 1, '. ', prompt),
+            h('div', { class: 'wt-given' }, '내 답: ', h('span', { class: a.ok === 'wrong' ? 'x' : null }, a.given || '(빈칸)')),
+            a.ok !== 'ok' ? h('div', { class: 'wt-right' }, '정답: ', h('b', { class: t.a === 'word' ? 'en' : null }, right)) : null,
+            a.ok === 'check' ? h('div', { class: 'meta' }, '비슷하지만 확실하지 않아서 아빠가 확인해요') : null),
+          judge);
+      });
+      body.replaceChildren(h('div', { class: 'wt-res' },
+        h('div', { class: 'wt-hero' },
+          h('div', { class: 'wt-score' }, res.score, h('small', null, '점')),
+          h('div', null, h('b', null, `${res.total}문제 중 ${res.correct}개 맞았어요`), h('div', { class: 'meta' }, [fmtDate(res.finishedAt), `걸린 시간 ${Math.floor(res.durationSec / 60)}분 ${res.durationSec % 60}초`, res.by && res.by !== 'ain' ? (WHO[res.by] || res.by) + '가 풀었어요' : null, res.check ? `확인 필요 ${res.check}개` : null].filter(Boolean).join(' · ')))),
+        praise,
+        h('ol', { class: 'wt-rlist' }, rows),
+        h('div', { class: 'row', style: 'justify-content:center' },
+          res.answers.some(a => a.ok === 'wrong') ? h('button', { class: 'btn primary', type: 'button', onclick: () => { close(); WT.type = res.type; WT.tab = 'notes'; go('wordtest'); } }, '📒 오답노트 보기') : null,
+          h('button', { class: 'btn', type: 'button', onclick: close }, '닫기'))));
+    };
+    draw();
+    wrap.append(h('div', { class: 'viewer-bar' }, h('button', { class: 'btn sm', type: 'button', onclick: close }, '닫기'), h('div', { class: 'vt' }, res.title, h('small', null, (res.kind === 'retry' ? '오답 다시 보기' : t.name) + ' · 결과'))), body);
+    document.body.append(wrap); document.body.style.overflow = 'hidden';
+    if (opt.newReward) { try { wrap.animate([{ transform: 'scale(.98)', opacity: .6 }, { transform: 'none', opacity: 1 }], { duration: 260 }); } catch (e) {} }
+  }
+
+  /* ---------- 오답노트 메모 ---------- */
+  function wnCard(n, t) {
+    WT.memo = WT.memo || {};
+    const memo = h('textarea', { class: 'wt-memo', id: 'wn-memo-' + n.id, rows: 2, placeholder: '나만의 암기 메모 (예: 비슷한 단어, 외우는 방법)', value: WT.memo[n.id] != null ? WT.memo[n.id] : (n.memo || '') });
+    const saveMemo = async (quiet) => { const v = (WT.memo[n.id] != null ? WT.memo[n.id] : memo.value).trim(); if (v === (n.memo || '')) return; try { await S.db.collection('wrongnotes').doc(n.id).update({ memo: v }); n.memo = v; if (!quiet) toast('메모를 저장했어요'); } catch (e) { toast('메모를 저장하지 못했어요'); } };
+    memo.addEventListener('input', () => { WT.memo[n.id] = memo.value; clearTimeout(WT.mt); WT.mt = setTimeout(() => saveMemo(true), 1200); });
+    memo.addEventListener('change', () => { clearTimeout(WT.mt); saveMemo(false); });
+    const right = t.a === 'word' ? n.word : (n.accept && n.accept.length ? n.accept.join(', ') : n.ko);
+    return h('article', { class: 'wt-card wn' + (n.status === 'done' ? ' done' : '') },
+      h('div', { class: 'row', style: 'align-items:baseline' }, h('b', { class: 'wt-q en' }, n.word), h('span', { class: 'spacer' }), h('span', { class: 'tag' }, `틀린 횟수 ${n.wrongCount || 1}`)),
+      h('div', null, h('span', { class: 'meta' }, '뜻 '), h('b', null, n.ko)),
+      n.lastGiven != null ? h('div', { class: 'wt-given' }, '내가 쓴 답: ', h('span', { class: 'x' }, n.lastGiven || '(빈칸)'), t.a === 'word' ? [' → ', h('b', { class: 'en' }, right)] : null) : null,
+      n.status === 'done' ? h('div', { class: 'meta' }, `✅ 외웠어요 · ${fmtDate(n.doneAt)}`) : h('div', { class: 'wt-dots', 'aria-label': `연속 정답 ${n.streak || 0}번` }, h('span', { class: 'meta' }, '다시 보기 연속 정답 '), h('i', { class: (n.streak || 0) >= 1 ? 'on' : null }), h('i', { class: (n.streak || 0) >= 2 ? 'on' : null }), h('span', { class: 'meta' }, ' (2번 맞히면 외운 단어로)')),
+      memo,
+      n.status === 'done' ? h('div', null, h('button', { class: 'btn sm ghost', type: 'button', onclick: () => S.db.collection('wrongnotes').doc(n.id).update({ status: 'open', streak: 0 }).catch(() => toast('바꾸지 못했어요')) }, '다시 오답노트로')) : null);
+  }
+
+  /* ---------- 점수 추이 그래프 ---------- */
+  function wtTrend(rs) {
+    const W = 600, H = 170, P = 26, n = rs.length; if (n < 2) return null;
+    const x = (i) => P + i * (W - 2 * P) / (n - 1), y = (v) => H - P - v / 100 * (H - 2 * P);
+    const pts = rs.map((r, i) => `${x(i).toFixed(1)},${y(r.score).toFixed(1)}`).join(' ');
+    const s = (tag, a) => { const e = document.createElementNS('http://www.w3.org/2000/svg', tag); for (const k in a) e.setAttribute(k, a[k]); return e; };
+    const svg = s('svg', { viewBox: `0 0 ${W} ${H}`, class: 'wt-trend', role: 'img', 'aria-label': `최근 ${n}번 점수 추이` });
+    [0, 50, 100].forEach(v => { svg.append(s('line', { x1: P, x2: W - P, y1: y(v), y2: y(v), class: 'g' })); const tx = s('text', { x: 2, y: y(v) + 4, class: 'l' }); tx.textContent = v; svg.append(tx); });
+    svg.append(s('line', { x1: P, x2: W - P, y1: y(95), y2: y(95), class: 'goal' }));
+    const gl = s('text', { x: W - P, y: y(95) - 5, class: 'l goal-l', 'text-anchor': 'end' }); gl.textContent = '95점 도토리'; svg.append(gl);
+    svg.append(s('polyline', { points: pts, class: 'ln' }));
+    rs.forEach((r, i) => { const c = s('circle', { cx: x(i), cy: y(r.score), r: 4.5, class: 'pt' + (wtQualifies(r) ? ' good' : '') }); const ti = s('title', {}); ti.textContent = `${fmtDate(r.finishedAt)} ${r.title} ${r.score}점`; c.append(ti); svg.append(c); });
+    return svg;
+  }
+
+  VIEWS.wordtest = () => {
+    const t = wtType(WT.type);
+    const tests = S.wordtests.filter(x => x.type === t.id).sort((a, b) => (a.order || 0) - (b.order || 0) || String(a.title).localeCompare(String(b.title), 'ko', { numeric: true }));
+    const results = S.testresults.filter(r => r.type === t.id).sort((a, b) => (b.finishedAt || 0) - (a.finishedAt || 0));
+    const full = results.filter(r => r.kind === 'full');
+    const notes = S.wrongnotes.filter(n => n.type === t.id), open = notes.filter(n => n.status !== 'done').sort((a, b) => (b.wrongCount || 0) - (a.wrongCount || 0) || (b.lastWrongAt || 0) - (a.lastWrongAt || 0)), done = notes.filter(n => n.status === 'done');
+    const rewarded = wtRewardedIds();
+    const pend = S.canEdit ? S.testresults.filter(r => r.check > 0).sort((a, b) => (b.finishedAt || 0) - (a.finishedAt || 0)) : [];
+    const typeSeg = h('div', { class: 'chips' }, WT_TYPES.map(x => chip(x.id, x.name, null, S.wordtests.filter(w => w.type === x.id).length, x.id === t.id, () => { WT.type = x.id; store.set('ain-wt-type', x.id); render(); })));
+    const tabs = h('div', { class: 'seg' }, [['tests', '시험지'], ['notes', `오답노트 ${open.length || ''}`], ['stats', '기록·통계']].map(([k, l]) => h('button', { type: 'button', 'aria-pressed': String(WT.tab === k), onclick: () => { WT.tab = k; render(); } }, l.trim())));
+    let main;
+    if (WT.tab === 'tests') {
+      const books = [...new Set(tests.map(x => x.book || t.name))];
+      main = tests.length ? books.map(b => h('section', { class: 'panel' }, h('div', { class: 'panel-head' }, h('h2', null, b), h('span', { class: 'meta' }, t.ask)),
+        h('div', { class: 'wt-grid' }, tests.filter(x => (x.book || t.name) === b).map(x => {
+          const rs = full.filter(r => r.testId === x.id), best = rs.length ? Math.max(...rs.map(r => r.score)) : null, draft = store.get(wtDraftKey(x.id), null);
+          const filledN = draft && draft.answers ? Object.values(draft.answers).filter(v => String(v).trim()).length : 0;
+          return h('article', { class: 'wt-card' },
+            h('div', { class: 'row', style: 'align-items:baseline' }, h('b', null, x.title), h('span', { class: 'spacer' }), rewarded.has(x.id) ? h('span', { class: 'tag', title: '95% 이상 달성' }, '🌰 받음') : null),
+            h('div', { class: 'meta' }, [`${(x.items || []).length}문제`, rs.length ? `${rs.length}번 응시` : '아직 안 풀었어요', best != null ? `최고 ${best}점` : null].filter(Boolean).join(' · ')),
+            h('div', { class: 'row' },
+              h('button', { class: 'btn primary', type: 'button', onclick: () => openWordTest(x) }, icon('i-pen'), filledN ? `이어서 풀기 (${filledN}/${(x.items || []).length})` : '시험 보기'),
+              rs.length ? h('button', { class: 'btn sm ghost', type: 'button', onclick: () => openWordResult(rs[0]) }, '최근 결과') : null,
+              S.canEdit ? h('span', { class: 'spacer' }) : null, S.canEdit ? confirmBtn('삭제', () => S.db.collection('wordtests').doc(x.id).delete().catch(() => toast('지우지 못했어요'))) : null));
+        })))) : h('section', { class: 'panel' }, needDb() || empty('아직 시험지가 없어요', S.canEdit ? '시험지(단어장) 사진을 직원에게 보내 주시면 시험지로 만들어 올려 드려요.' : '아빠가 시험지를 올리면 여기에 나와요.', null, '📝'));
+    } else if (WT.tab === 'notes') {
+      const retry = () => { const pick = shuffle(open).slice(0, 30); openWordTest({ id: 'retry-' + t.id, type: t.id, title: `${t.name} 오답 다시 보기`, items: pick.map(n => ({ word: n.word, ko: n.ko, accept: n.accept, noteId: n.id })) }, true); };
+      main = [h('section', { class: 'panel' },
+        h('div', { class: 'panel-head' }, h('h2', null, `📒 오답노트 · ${t.name}`), h('span', { class: 'meta' }, `외울 단어 ${open.length}개 · 외운 단어 ${done.length}개`)),
+        open.length ? h('div', { class: 'row' }, h('button', { class: 'btn primary', type: 'button', onclick: retry }, icon('i-pen'), `오답만 다시 보기 (${Math.min(open.length, 30)}문제)`), h('span', { class: 'meta' }, '다시 보기에서 연속 2번 맞히면 외운 단어로 넘어가요.')) : null,
+        needDb() || (open.length ? h('div', { class: 'wt-grid' }, open.map(n => wnCard(n, t))) : empty(notes.length ? '오답노트를 다 외웠어요!' : '아직 틀린 단어가 없어요', notes.length ? '대단해요. 새 시험지에 도전해 봐요.' : '시험에서 틀린 단어가 여기에 모여요.', null, '🎉'))),
+        done.length ? h('details', { class: 'panel' }, h('summary', null, h('b', null, `✅ 외운 단어 ${done.length}개`)), h('div', { class: 'wt-grid', style: 'margin-top:12px' }, done.sort((a, b) => (b.doneAt || 0) - (a.doneAt || 0)).map(n => wnCard(n, t)))) : null];
+    } else {
+      const avg = full.length ? Math.round(full.reduce((a, r) => a + r.score, 0) / full.length) : null;
+      const best = full.length ? Math.max(...full.map(r => r.score)) : null;
+      const acornN = new Set(full.filter(wtQualifies).map(r => r.testId)).size;
+      const trend = wtTrend(full.slice(0, 20).reverse());
+      const top = notes.slice().sort((a, b) => (b.wrongCount || 0) - (a.wrongCount || 0)).filter(n => (n.wrongCount || 0) > 0).slice(0, 10);
+      const per = tests.map(x => { const rs = full.filter(r => r.testId === x.id); return { x, n: rs.length, best: rs.length ? Math.max(...rs.map(r => r.score)) : null, last: rs[0] }; });
+      main = [h('section', { class: 'panel' }, h('div', { class: 'panel-head' }, h('h2', null, `📈 ${t.name} 기록`)),
+          h('div', { class: 'wt-kpis' },
+            h('div', { class: 'wt-kpi' }, h('span', null, '시험 본 횟수'), h('b', null, full.length), h('small', null, results.length - full.length ? `오답 다시 보기 ${results.length - full.length}번` : '')),
+            h('div', { class: 'wt-kpi' }, h('span', null, '평균 점수'), h('b', null, avg != null ? avg + '점' : '–')),
+            h('div', { class: 'wt-kpi' }, h('span', null, '최고 점수'), h('b', null, best != null ? best + '점' : '–')),
+            h('div', { class: 'wt-kpi' }, h('span', null, '받은 도토리'), h('b', null, '🌰 ' + acornN)),
+            h('div', { class: 'wt-kpi' }, h('span', null, '오답노트'), h('b', null, open.length), h('small', null, `외운 단어 ${done.length}개`))),
+          trend ? h('div', null, h('div', { class: 'meta' }, '최근 점수 추이 (노란 선이 95점)'), trend) : h('p', { class: 'meta' }, '시험을 2번 이상 보면 점수 추이 그래프가 나와요.')),
+        top.length ? h('section', { class: 'panel' }, h('div', { class: 'panel-head' }, h('h2', null, '자주 틀린 단어 TOP 10')),
+          h('ol', { class: 'wt-top' }, top.map(n => h('li', null, h('b', { class: 'en' }, n.word), h('span', null, n.ko), h('span', { class: 'tag' }, `${n.wrongCount}번`), n.status === 'done' ? h('span', { class: 'meta' }, '✅ 외움') : null)))) : null,
+        per.length ? h('section', { class: 'panel' }, h('div', { class: 'panel-head' }, h('h2', null, '시험지별 기록')),
+          h('div', { class: 'wt-table', role: 'table' }, h('div', { class: 'wt-tr th', role: 'row' }, h('span', null, '시험지'), h('span', null, '응시'), h('span', null, '최고'), h('span', null, '최근')),
+            per.map(p => h('div', { class: 'wt-tr', role: 'row' }, h('span', null, p.x.title), h('span', null, p.n || '–'), h('span', null, p.best != null ? p.best + '점' : '–'), h('span', null, p.last ? h('button', { class: 'btn sm ghost', type: 'button', onclick: () => openWordResult(p.last) }, `${p.last.score}점 · ${fmtDate(p.last.finishedAt)}`) : '–'))))) : null,
+        results.length ? h('section', { class: 'panel' }, h('div', { class: 'panel-head' }, h('h2', null, '최근 시험')),
+          h('div', { class: 'list' }, results.slice(0, 15).map(r => h('button', { class: 'wt-hist', type: 'button', onclick: () => openWordResult(r) },
+            h('b', null, r.score + '점'), h('span', null, r.title), h('span', { class: 'meta' }, [fmtDate(r.finishedAt), r.kind === 'retry' ? '오답 다시 보기' : null, r.by && r.by !== 'ain' ? WHO[r.by] : null, r.check ? `확인 필요 ${r.check}` : null].filter(Boolean).join(' · ')), wtQualifies(r) ? h('span', null, '🌰') : null)))) : null];
+    }
+    return h('div', { class: 'page' },
+      pageHead('공부', '단어 시험', 'TOEFL 단어는 단어를 보고 뜻을, 능률 VOCA는 뜻을 보고 스펠링을 적어요. 정답률 95% 이상이면 도토리 1개!'),
+      pend.length ? h('section', { class: 'panel wt-pend' }, h('div', { class: 'panel-head' }, h('h2', null, '❔ 아빠가 확인할 답'), h('span', { class: 'meta' }, `${pend.reduce((a, r) => a + r.check, 0)}개`)),
+        h('div', { class: 'list' }, pend.slice(0, 8).map(r => h('button', { class: 'wt-hist', type: 'button', onclick: () => openWordResult(r) }, h('b', null, r.score + '점'), h('span', null, r.title), h('span', { class: 'meta' }, `${fmtDate(r.finishedAt)} · 확인 필요 ${r.check}개`))))) : null,
+      h('div', { class: 'row', style: 'justify-content:space-between' }, typeSeg, tabs),
+      main);
+  };
+
   VIEWS.rest = () => {
     const recent = store.get('ain-recent-music', []);
     const remember = (t, url) => { const r = store.get('ain-recent-music', []).filter(x => x.url !== url); r.unshift({ t, url, at: Date.now() }); store.set('ain-recent-music', r.slice(0, 6)); };
@@ -2640,7 +2997,7 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
     S.db = db; S.assets = assets; S.downloads = downloads;
     try { S.canEdit = !!(user && await user.canEdit()); } catch (e) { S.canEdit = false; }
     if (!db) { render(); return; }
-    const COLS = ['subjects', 'materials', 'backgrounds', 'vocabsets', 'stories', 'broadcasts', 'articles', 'bookpicks', 'mybooks', 'home', 'homeitems', 'homechat', 'homegreet', 'playlists', 'homework', 'logs', 'words'];
+    const COLS = ['subjects', 'materials', 'backgrounds', 'vocabsets', 'stories', 'broadcasts', 'articles', 'bookpicks', 'mybooks', 'home', 'homeitems', 'homechat', 'homegreet', 'playlists', 'homework', 'logs', 'words', 'wordtests', 'testresults', 'wrongnotes'];
     COLS.forEach(c => db.collection(c).onSnapshot(snap => { S[c] = snap.docs.map(d => ({ ...d.data(), id: d.id })); queueRender(); }, () => {}));
     render();
   })();
