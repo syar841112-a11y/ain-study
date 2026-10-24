@@ -704,6 +704,60 @@ input.wt-in { font-size: 18px; min-height: 48px; padding: 10px 12px; width: 100%
   .wt-tr { grid-template-columns: minmax(0, 1.6fr) 0.5fr 0.7fr minmax(0, 1.4fr); font-size: 13px; }
   .wt-foot .btn { width: 100%; }
 }
+
+.gt-gap { display: inline-block; width: 4.2em; border-bottom: 1.5px solid currentColor; margin: 0 4px; vertical-align: -2px; }
+/* 시험창고 탭 + 문법 시험 */
+.tc-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.tc-tab { border: 1px solid var(--line); background: var(--surface); border-radius: 16px; padding: 12px 8px; display: flex; gap: 6px; align-items: center; justify-content: center; font: inherit; font-size: 15px; color: var(--muted); cursor: pointer; }
+.tc-tab small { font-family: var(--f-num); font-size: 11px; background: var(--sunken); border-radius: 999px; padding: 0 7px; }
+.tc-tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.tc-tab[aria-selected="true"] small { background: color-mix(in srgb, var(--accent-ink) 25%, transparent); }
+.gt-intro { max-width: 760px; width: 100%; margin: 0 auto; color: var(--muted); font-size: 14px; }
+.gt-list { list-style: none; padding: 0; margin: 0 auto; display: grid; gap: 14px; max-width: 760px; width: 100%; }
+.gt-q { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 12px; }
+.gt-head { display: flex; gap: 10px; align-items: flex-start; }
+.gt-no { flex: none; font-family: var(--f-read); font-weight: 700; font-size: 18px; color: var(--accent); min-width: 26px; }
+.gt-stem { font-weight: 700; line-height: 1.55; }
+.gt-stem u, .gt-box u, .gt-choice u, .gt-rchoices u { text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.gt-tag { display: inline-block; margin-left: 6px; font-size: 11px; font-weight: 400; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 1px 8px; vertical-align: 2px; }
+.gt-box { border: 1px solid var(--line); background: var(--paper); border-radius: 12px; padding: 12px 14px; font-family: var(--f-read); font-size: 16px; line-height: 1.75; overflow-wrap: anywhere; }
+.gt-box.sm { font-size: 14px; padding: 8px 12px; }
+.gt-choices { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.gt-choices.long { grid-template-columns: 1fr; }
+.gt-choice { display: flex; gap: 8px; align-items: flex-start; text-align: left; border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 10px 12px; font: inherit; font-family: var(--f-read); font-size: 15.5px; color: var(--ink); cursor: pointer; line-height: 1.5; min-height: 44px; }
+.gt-choice .gt-c { font-family: var(--f-ui); color: var(--faint); flex: none; }
+.gt-choice[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.gt-choice[aria-pressed="true"] .gt-c { color: var(--accent); font-weight: 700; }
+.gt-blanks { display: grid; gap: 10px; }
+.gt-blank { display: grid; gap: 6px; font-size: 14px; }
+.gt-blank > b { color: var(--accent); }
+.gt-pre { font-family: var(--f-read); color: var(--muted); }
+.gt-in { font-size: 17px !important; font-family: var(--f-read); width: 100%; min-height: 46px; -webkit-user-select: text; user-select: text; }
+textarea.gt-in { min-height: 72px; resize: vertical; }
+.gt-rbody { gap: 6px; }
+.gt-rchoices { display: grid; gap: 2px; font-family: var(--f-read); font-size: 14px; color: var(--muted); }
+.gt-rchoices .right { color: var(--ok); font-weight: 700; }
+.gt-rchoices .mine:not(.right) { color: var(--danger); text-decoration: line-through; }
+.gt-exp { background: var(--sunken); border-radius: 10px; padding: 8px 12px; font-size: 14px; }
+.gt-exp summary { cursor: pointer; font-weight: 700; color: var(--accent); }
+.gt-exp p { margin: 6px 0 0; line-height: 1.6; }
+.gt-kind { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 2px 10px; background: var(--sky-soft); color: var(--sky); }
+.gt-kind.weekly { background: var(--rose-soft); color: var(--rose); }
+.gn-list { display: grid; gap: 12px; }
+.gt-bars { display: grid; gap: 8px; }
+.gt-bar { display: grid; grid-template-columns: minmax(90px, 1.2fr) 3fr auto auto; gap: 10px; align-items: center; font-size: 14px; }
+.gt-track { height: 10px; background: var(--sunken); border-radius: 999px; overflow: hidden; }
+.gt-track i { display: block; height: 100%; background: var(--ok); border-radius: 999px; }
+.gt-track i.mid { background: var(--sun); }
+.gt-track i.low { background: var(--danger); }
+.gt-bar small { color: var(--faint); font-family: var(--f-num); }
+@media (max-width: 560px) {
+  .tc-tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+  .tc-tab { flex-direction: column; gap: 2px; padding: 10px 4px; font-size: 14px; }
+  .gt-choices { grid-template-columns: 1fr; }
+  .gt-bar { grid-template-columns: 1fr 2fr auto; }
+  .gt-bar small { display: none; }
+}
 </style>
 </head>
 <body>
@@ -1035,7 +1089,7 @@ input.wt-in { font-size: 18px; min-height: 48px; padding: 10px 12px; width: 100%
     { id: 'home', name: '오늘', icon: 'i-home', group: 0, emo: '☀️', b: 'var(--sun-soft)' },
     { id: 'minihome', name: '우리 집', icon: 'i-house', group: 0, emo: '🏡', b: 'var(--rose-soft)' },
     { id: 'books', name: '교재창고', icon: 'i-books', group: 1, emo: '📚', b: 'var(--sky-soft)' },
-    { id: 'wordtest', name: '단어 시험', icon: 'i-test', group: 1, emo: '📝', b: 'var(--accent-soft)' },
+    { id: 'wordtest', name: '시험창고', icon: 'i-test', group: 1, emo: '📝', b: 'var(--accent-soft)' },
     { id: 'homework', name: '용선생 한마디', icon: 'i-pen', group: 1, emo: '✏️', b: 'var(--rose-soft)' },
     { id: 'cast', name: '아침방송', icon: 'i-radio', group: 1, emo: '📻', b: 'var(--sky-soft)' },
     { id: 'news', name: '오늘의 시사', icon: 'i-news', group: 1, emo: '📰', b: 'var(--sun-soft)' },
@@ -1051,7 +1105,7 @@ input.wt-in { font-size: 18px; min-height: 48px; padding: 10px 12px; width: 100%
   /* ---------- state ---------- */
   const S = {
     view: 'home', db: null, assets: null, downloads: null, canEdit: false, ready: false,
-    subjects: [], materials: [], backgrounds: [], vocabsets: [], stories: [], broadcasts: [], articles: [], bookpicks: [], mybooks: [], home: [], homeitems: [], homechat: [], homegreet: [], playlists: [], homework: [], logs: [], words: [], wordtests: [], testresults: [], wrongnotes: [],
+    subjects: [], materials: [], backgrounds: [], vocabsets: [], stories: [], broadcasts: [], articles: [], bookpicks: [], mybooks: [], home: [], homeitems: [], homechat: [], homegreet: [], playlists: [], homework: [], logs: [], words: [], wordtests: [], gramtests: [], testresults: [], wrongnotes: [],
     bookFilter: 'all', bookQuery: '', newsSection: '전체', shelfTab: 'week', shelfWeek: null,
     calMonth: (() => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1); })(), calDay: today(), hwTab: 'open'
   };
@@ -1193,7 +1247,7 @@ input.wt-in { font-size: 18px; min-height: 48px; padding: 10px 12px; width: 100%
   /* 바로가기: 정해 둔 순서 + 새로 생긴 메뉴는 빠짐없이 자동으로 덧붙임 */
   const QUICK_ORDER = ['books', 'wordtest', 'homework', 'cast', 'news', 'shelf', 'rest', 'steps', 'dict', 'timer', 'minihome'];
   const QUICK_MENUS = () => [...QUICK_ORDER.map(id => MENUS.find(x => x.id === id)).filter(Boolean), ...MENUS.filter(m => m.id !== 'home' && !QUICK_ORDER.includes(m.id))];
-  const QUICK_DESC = { wordtest: 'TOEFL·VOCA 단어 시험', books: '과목별 정식 교재', homework: '아빠가 낸 숙제', steps: '공부 달력과 통계', timer: '공부 시간 재기', cast: '영단어·스토리·수학', news: '비문학 읽을거리', dict: '단어·숙어 찾기', shelf: '이번 주 추천 책장', minihome: '가족 미니홈피', rest: '쉬는 시간 음악' };
+  const QUICK_DESC = { wordtest: '문법·독해·듣기·단어 시험', books: '과목별 정식 교재', homework: '아빠가 낸 숙제', steps: '공부 달력과 통계', timer: '공부 시간 재기', cast: '영단어·스토리·수학', news: '비문학 읽을거리', dict: '단어·숙어 찾기', shelf: '이번 주 추천 책장', minihome: '가족 미니홈피', rest: '쉬는 시간 음악' };
   const fmtMinParts = (m) => { m = Math.round(m || 0); if (m < 60) return [String(m), '분']; return [String(Math.floor(m / 60)) + ':' + pad(m % 60), '시간']; };
   const kpi = (label, [v, unit]) => h('div', { class: 'kpi' }, h('span', null, label), h('b', null, v, h('small', null, unit)));
   function latestBy(arr) { if (!arr.length) return []; const sorted = arr.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '') || (a.order || 0) - (b.order || 0)); const top = sorted[0].date; return sorted.filter(x => x.date === top); }
@@ -2654,7 +2708,7 @@ input.wt-in { font-size: 18px; min-height: 48px; padding: 10px 12px; width: 100%
         praise,
         h('ol', { class: 'wt-rlist' }, rows),
         h('div', { class: 'row', style: 'justify-content:center' },
-          res.answers.some(a => a.ok === 'wrong') ? h('button', { class: 'btn primary', type: 'button', onclick: () => { close(); WT.type = res.type; WT.tab = 'notes'; go('wordtest'); } }, '📒 오답노트 보기') : null,
+          res.answers.some(a => a.ok === 'wrong') ? h('button', { class: 'btn primary', type: 'button', onclick: () => { close(); WT.cat = 'word'; WT.type = res.type; WT.tab = 'notes'; go('wordtest'); } }, '📒 오답노트 보기') : null,
           h('button', { class: 'btn', type: 'button', onclick: close }, '닫기'))));
     };
     draw();
@@ -2695,14 +2749,270 @@ input.wt-in { font-size: 18px; min-height: 48px; padding: 10px 12px; width: 100%
     return svg;
   }
 
-  VIEWS.wordtest = () => {
+  /* ================= 문법 시험 (객관식·모두 고르기·서술형) ================= */
+  const GT = { tab: 'tests' };
+  const GT_KIND = { naesin: '내신 대비', weekly: '씨앤씨 위클리 대비' };
+  /* 문제 글: __밑줄__ , 줄바꿈은 \n */
+  const gtText = (s) => String(s || '').split('\n').map((line, li, arr) => [line.split(/(_{3,}|__[^_].*?__)/g).map(p => /^_{3,}$/.test(p) ? h('span', { class: 'gt-gap', 'aria-label': '빈칸' }) : /^__.+__$/.test(p) ? h('u', null, p.slice(2, -2)) : p), li < arr.length - 1 ? h('br') : null]);
+  const CIRC = ['①', '②', '③', '④', '⑤', '⑥'];
+  const normSent = (s) => String(s || '').toLowerCase().replace(/[’‘`´]/g, "'").replace(/[“”]/g, '"').replace(/\s*([,.!?])\s*/g, '$1 ').replace(/[.!?]+\s*$/, '').replace(/\s+/g, ' ').trim();
+  const sentWords = (s) => normSent(s).replace(/[,.!?"]/g, ' ').split(/\s+/).filter(Boolean);
+  function gradeBlank(given, accept) {
+    const g = normSent(given); if (!g) return 'wrong';
+    if (accept.some(a => normSent(a) === g)) return 'ok';
+    // 문장형 답: 단어가 거의 같으면(한두 단어 차이) 아빠 확인으로
+    const gw = sentWords(given);
+    if (gw.length >= 4) for (const a of accept) {
+      const aw = sentWords(a); if (aw.length < 4) continue;
+      const A = new Set(aw), G = new Set(gw); let inter = 0; G.forEach(w => { if (A.has(w)) inter++; });
+      const jac = inter / (new Set([...aw, ...gw]).size);
+      if (jac >= 0.8 && Math.abs(aw.length - gw.length) <= 2) return 'check';
+    }
+    return 'wrong';
+  }
+  /* 한 문제 채점 → 'ok' | 'check' | 'wrong' */
+  function gradeQ(q, ans) {
+    if (q.kind === 'mc') return ans != null && ans === q.answer ? 'ok' : 'wrong';
+    if (q.kind === 'mcm') { const a = (Array.isArray(ans) ? ans : []).slice().sort().join(','), b = q.answer.slice().sort().join(','); return a && a === b ? 'ok' : 'wrong'; }
+    const rs = (q.blanks || []).map((b, i) => gradeBlank((ans || [])[i], b.accept || []));
+    return rs.every(r => r === 'ok') ? 'ok' : rs.some(r => r === 'wrong') ? 'wrong' : 'check';
+  }
+  const gtAnswerText = (q) => q.kind === 'mc' ? `${CIRC[q.answer]} ${q.choices[q.answer]}` : q.kind === 'mcm' ? q.answer.map(i => CIRC[i]).join(', ') : (q.blanks || []).map(b => (b.label ? b.label + ' ' : '') + (b.accept || [])[0]).join('\n');
+  const gtGivenText = (q, ans) => q.kind === 'mc' ? (ans != null ? `${CIRC[ans]} ${q.choices[ans]}` : '(안 고름)') : q.kind === 'mcm' ? ((ans || []).length ? ans.slice().sort().map(i => CIRC[i]).join(', ') : '(안 고름)') : (q.blanks || []).map((b, i) => (b.label ? b.label + ' ' : '') + (((ans || [])[i] || '').trim() || '(빈칸)')).join('\n');
+  const gtFilled = (q, ans) => q.kind === 'mc' ? ans != null : q.kind === 'mcm' ? (ans || []).length > 0 : (q.blanks || []).every((b, i) => ((ans || [])[i] || '').trim());
+
+  function gtQuestionView(q, k, ans, onChange) {
+    const head = h('div', { class: 'gt-head' }, h('span', { class: 'gt-no' }, k + 1), h('div', { class: 'gt-stem' }, gtText(q.stem)));  /* 문법 포인트 꼬리표는 힌트가 되므로 시험 중엔 숨기고 결과·오답노트에서만 보여 줌 */
+    const box = q.box ? h('div', { class: 'gt-box' }, gtText(q.box)) : null;
+    let body;
+    if (q.kind === 'mc' || q.kind === 'mcm') {
+      const sel = () => q.kind === 'mc' ? [ans] : (ans || []);
+      body = h('div', { class: 'gt-choices' + (q.choices.some(c => c.length > 28) ? ' long' : '') }, q.choices.map((c, i) => {
+        const b = h('button', { type: 'button', class: 'gt-choice', 'aria-pressed': String(sel().includes(i)), onclick: () => {
+          if (q.kind === 'mc') ans = ans === i ? null : i; else { const s = new Set(ans || []); s.has(i) ? s.delete(i) : s.add(i); ans = [...s].sort(); }
+          body.querySelectorAll('.gt-choice').forEach((x, j) => x.setAttribute('aria-pressed', String(sel().includes(j)))); onChange(ans);
+        } }, h('span', { class: 'gt-c' }, CIRC[i]), h('span', null, gtText(c)));
+        return b;
+      }));
+    } else {
+      ans = Array.isArray(ans) ? ans.slice() : [];
+      body = h('div', { class: 'gt-blanks' }, (q.blanks || []).map((b, i) => {
+        const long = b.long || (b.accept && b.accept[0] && b.accept[0].split(' ').length > 3);
+        const inp = h(long ? 'textarea' : 'input', { class: 'gt-in', type: long ? null : 'text', rows: long ? 2 : null, lang: 'en', autocomplete: 'off', autocorrect: 'off', autocapitalize: 'off', spellcheck: 'false', value: ans[i] || '', placeholder: b.ph || '답을 적어요',
+          oninput: (e) => { ans[i] = e.target.value; onChange(ans); } });
+        return h('label', { class: 'gt-blank' }, b.label ? h('b', null, b.label) : null, b.pre ? h('span', { class: 'gt-pre' }, gtText(b.pre)) : null, inp);
+      }));
+    }
+    return h('li', { class: 'gt-q' }, head, box, body);
+  }
+
+  function openGrammarTest(test, retry) {
+    const qs = test.questions || []; if (!qs.length) { toast('문제가 없는 시험지예요'); return; }
+    const key = retry ? null : 'ain-gt-draft-' + test.id;
+    let draft = key ? store.get(key, null) : null;
+    if (!draft || !draft.answers || draft.n !== qs.length) draft = { n: qs.length, answers: {}, startedAt: Date.now() };
+    const save = () => { if (key) store.set(key, draft); };
+    save();
+    const wrap = h('div', { class: 'viewer wt gt', role: 'dialog', 'aria-modal': 'true', 'aria-label': test.title });
+    const prog = h('span', { class: 'wt-prog' }), clock = h('span', { class: 'wt-clock' });
+    const filled = () => qs.filter(q => gtFilled(q, draft.answers[q.id])).length;
+    const upd = () => { prog.textContent = `${filled()} / ${qs.length} 풀이`; };
+    const tick = () => { const s = Math.floor((Date.now() - draft.startedAt) / 1000); clock.textContent = `⏱ ${Math.floor(s / 60)}:${pad(s % 60)}`; };
+    const iv = setInterval(tick, 1000); tick();
+    const close = () => { clearInterval(iv); wrap.remove(); document.body.style.overflow = ''; };
+    const list = h('ol', { class: 'gt-list' }, qs.map((q, k) => gtQuestionView(q, k, draft.answers[q.id], (a) => { draft.answers[q.id] = a; save(); upd(); })));
+    const submit = async (btn) => {
+      if (!S.db) { toast('아직 연결 중이에요. 잠시 뒤 다시 눌러 주세요'); return; }
+      if (btn) { btn.disabled = true; btn.textContent = '채점하는 중…'; }
+      const fin = Date.now();
+      const answers = qs.map(q => { const given = draft.answers[q.id] != null ? draft.answers[q.id] : null; const a = { qid: q.id, ok: gradeQ(q, given), given, q }; if (q.noteId) a.noteId = q.noteId; return a; });
+      const res = { testId: test.id, type: 'grammar', title: test.title, book: test.book || '', chapter: test.chapter || '', gkind: test.kind || '', kind: retry ? 'retry' : 'full', by: wtMe(), startedAt: draft.startedAt, finishedAt: fin, durationSec: Math.round((fin - draft.startedAt) / 1000), answers, ...wtScore(answers) };
+      const before = wtRewardedIds();
+      let id;
+      try { id = (await S.db.collection('testresults').add(res)).id; }
+      catch (e) { toast('결과를 저장하지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요'); if (btn) { btn.disabled = false; btn.textContent = '종료하고 채점하기'; } return; }
+      if (key) { try { localStorage.removeItem(key); } catch (e) {} }
+      await gtUpdateNotes(res);
+      close();
+      openGrammarResult({ ...res, id }, { fresh: true, newReward: wtQualifies(res) && !before.has(res.testId) });
+    };
+    const finBtn = h('button', { class: 'btn primary lg', type: 'button', onclick: (e) => {
+      const blanks = qs.length - filled(), b = e.currentTarget;
+      if (!blanks) { submit(b); return; }
+      sheetOpen('시험을 끝낼까요?', (closeS) => h('div', { class: 'stack' }, h('p', null, `아직 안 푼 문제가 ${blanks}개 있어요. 안 푼 문제는 틀린 것으로 채점돼요.`),
+        h('div', { class: 'row' }, h('button', { class: 'btn', type: 'button', onclick: closeS }, '더 풀래요'), h('button', { class: 'btn primary', type: 'button', onclick: () => { closeS(); submit(b); } }, '그래도 끝내기'))));
+    } }, '종료하고 채점하기');
+    upd();
+    wrap.append(
+      h('div', { class: 'viewer-bar wt-bar' },
+        h('button', { class: 'btn sm', type: 'button', onclick: () => { close(); if (key) toast('푼 답은 저장돼 있어요. 다시 열면 이어서 풀 수 있어요'); } }, '나가기'),
+        h('div', { class: 'vt' }, test.title, h('small', null, [retry ? '오답 다시 보기' : (GT_KIND[test.kind] || '문법'), test.chapter].filter(Boolean).join(' · '))),
+        clock, prog),
+      h('div', { class: 'viewer-body wt-body' }, test.intro ? h('p', { class: 'gt-intro' }, test.intro) : null, list),
+      h('div', { class: 'wt-foot' }, finBtn));
+    document.body.append(wrap); document.body.style.overflow = 'hidden';
+  }
+
+  const gnId = (testId, qid) => 'g-' + String(testId).replace(/[^a-z0-9-]/gi, '') + '-' + qid;
+  async function gtUpdateNotes(res) {
+    for (const a of res.answers) {
+      if (a.ok === 'check') continue;
+      const id = a.noteId || gnId(res.testId, a.qid), cur = S.wrongnotes.find(x => x.id === id);
+      try {
+        if (a.ok === 'wrong') {
+          const q = { ...a.q }; delete q.noteId;
+          await S.db.collection('wrongnotes').doc(id).set({ type: 'grammar', q, word: (q.tag || '문법') + ' · ' + String(q.stem || '').slice(0, 30), testId: cur ? cur.testId : res.testId, testTitle: cur ? cur.testTitle : res.title,
+            wrongCount: (cur ? cur.wrongCount || 0 : 0) + 1, streak: 0, status: 'open', lastGiven: a.given == null ? null : a.given, lastWrongAt: res.finishedAt, firstWrongAt: cur ? cur.firstWrongAt || res.finishedAt : res.finishedAt, memo: cur ? cur.memo || '' : '' });
+        } else if (cur && cur.status !== 'done') {
+          const streak = (cur.streak || 0) + 1;
+          await S.db.collection('wrongnotes').doc(id).update({ streak, status: streak >= 2 ? 'done' : 'open', doneAt: streak >= 2 ? res.finishedAt : null, lastRightAt: res.finishedAt });
+        }
+      } catch (e) {}
+    }
+  }
+  async function gtJudge(res, idx, ok) {
+    const answers = res.answers.map((a, i) => i === idx ? { ...a, ok: ok ? 'ok' : 'wrong', judged: true } : a);
+    const next = { ...stripId(res), answers, ...wtScore(answers) };
+    try { await S.db.collection('testresults').doc(res.id).set(next); } catch (e) { toast('바꾸지 못했어요'); return null; }
+    const a = answers[idx];
+    if (ok) {
+      // 서술형 답을 정답으로 인정하면 다음부터 자동 정답
+      const test = S.gramtests.find(x => x.id === res.testId);
+      if (test && a.q && a.q.blanks && Array.isArray(a.given)) {
+        const questions = test.questions.map(q => q.id === a.qid ? { ...q, blanks: q.blanks.map((b, i) => (a.given[i] || '').trim() ? { ...b, accept: Array.from(new Set([...(b.accept || []), a.given[i].trim()])) } : b) } : q);
+        try { await S.db.collection('gramtests').doc(test.id).update({ questions }); } catch (e) {}
+      }
+      const nid = a.noteId || gnId(res.testId, a.qid), cur = S.wrongnotes.find(x => x.id === nid);
+      if (cur && res.answers[idx].ok === 'wrong') { try { if ((cur.wrongCount || 1) <= 1) await S.db.collection('wrongnotes').doc(nid).delete(); else await S.db.collection('wrongnotes').doc(nid).update({ wrongCount: cur.wrongCount - 1 }); } catch (e) {} }
+    } else if (res.answers[idx].ok !== 'wrong') await gtUpdateNotes({ ...res, answers: [a] });
+    return { ...next, id: res.id };
+  }
+
+  function openGrammarResult(res, opt = {}) {
+    const wrap = h('div', { class: 'viewer wt gt', role: 'dialog', 'aria-modal': 'true', 'aria-label': '시험 결과' });
+    const body = h('div', { class: 'viewer-body wt-body' });
+    const close = () => { wrap.remove(); document.body.style.overflow = ''; };
+    const draw = () => {
+      const qual = wtQualifies(res), pending = res.check > 0, couldQual = res.kind === 'full' && pending && (res.correct + res.check) / res.total >= 0.95;
+      const praise = qual ? h('div', { class: 'wt-praise' }, h('div', { class: 'wt-praise-emo', 'aria-hidden': 'true' }, opt.newReward ? '🌰' : '🏆'),
+          h('b', null, opt.newReward ? '도토리 1개를 받았어요!' : (opt.fresh ? '정답률 95% 이상! (이 시험지 도토리는 이미 받았어요)' : '정답률 95% 이상 달성')), h('p', null, PRAISE[(res.finishedAt || 0) % PRAISE.length]))
+        : couldQual ? h('div', { class: 'wt-praise soft' }, h('b', null, '거의 다 왔어요!'), h('p', null, `확인이 필요한 답 ${res.check}개를 아빠가 맞다고 해 주면 95%를 넘어 도토리를 받을 수 있어요.`))
+        : res.kind === 'full' ? h('p', { class: 'meta', style: 'text-align:center' }, '정답률 95% 이상이면 도토리 1개를 받아요. 틀린 문제는 해설을 읽고 오답노트에서 다시 풀어 봐요!') : null;
+      const rows = res.answers.map((a, i) => {
+        const q = a.q || {}, mark = a.ok === 'ok' ? '⭕' : a.ok === 'check' ? '❔' : '❌';
+        const judge = S.canEdit && a.ok !== 'ok' && q.kind !== 'mc' && q.kind !== 'mcm' ? h('div', { class: 'row', style: 'gap:4px' },
+          h('button', { class: 'btn sm', type: 'button', onclick: async () => { const r = await gtJudge(res, i, true); if (r) { res = r; draw(); toast('정답으로 인정했어요. 다음부터 이 답도 정답 처리돼요'); } } }, '정답 인정'),
+          a.ok === 'check' ? h('button', { class: 'btn sm ghost danger', type: 'button', onclick: async () => { const r = await gtJudge(res, i, false); if (r) { res = r; draw(); toast('오답으로 처리하고 오답노트에 넣었어요'); } } }, '오답 처리') : null) : null;
+        return h('li', { class: 'wt-r gt-r ' + a.ok },
+          h('span', { class: 'wt-mark' }, mark),
+          h('div', { style: 'min-width:0', class: 'stack gt-rbody' },
+            h('div', { class: 'gt-stem' }, h('b', null, `${i + 1}. `), gtText(q.stem)),
+            q.box ? h('div', { class: 'gt-box sm' }, gtText(q.box)) : null,
+            q.kind === 'mc' || q.kind === 'mcm' ? h('div', { class: 'gt-rchoices' }, q.choices.map((c, j) => h('div', { class: [(q.kind === 'mc' ? q.answer === j : q.answer.includes(j)) ? 'right' : '', (q.kind === 'mc' ? a.given === j : (a.given || []).includes(j)) ? 'mine' : ''].join(' ') }, CIRC[j], ' ', gtText(c)))) : null,
+            h('div', { class: 'wt-given' }, '내 답: ', h('span', { class: a.ok === 'wrong' ? 'x' : null }, gtText(gtGivenText(q, a.given)))),
+            a.ok !== 'ok' ? h('div', { class: 'wt-right' }, '정답: ', h('b', null, gtText(gtAnswerText(q)))) : null,
+            q.explain ? h('details', { class: 'gt-exp', open: a.ok !== 'ok' ? true : null }, h('summary', null, '해설'), h('p', null, gtText(q.explain))) : null,
+            a.ok === 'check' ? h('div', { class: 'meta' }, '정답과 거의 같아서 아빠가 확인해요') : null),
+          judge);
+      });
+      body.replaceChildren(h('div', { class: 'wt-res' },
+        h('div', { class: 'wt-hero' }, h('div', { class: 'wt-score' }, res.score, h('small', null, '점')),
+          h('div', null, h('b', null, `${res.total}문제 중 ${res.correct}개 맞았어요`), h('div', { class: 'meta' }, [fmtDate(res.finishedAt), `걸린 시간 ${Math.floor(res.durationSec / 60)}분 ${res.durationSec % 60}초`, res.by && res.by !== 'ain' ? (WHO[res.by] || res.by) + '가 풀었어요' : null, res.check ? `확인 필요 ${res.check}개` : null].filter(Boolean).join(' · ')))),
+        praise, h('ol', { class: 'wt-rlist' }, rows),
+        h('div', { class: 'row', style: 'justify-content:center' },
+          res.answers.some(a => a.ok === 'wrong') ? h('button', { class: 'btn primary', type: 'button', onclick: () => { close(); WT.cat = 'grammar'; GT.tab = 'notes'; go('wordtest'); } }, '📒 오답노트 보기') : null,
+          h('button', { class: 'btn', type: 'button', onclick: close }, '닫기'))));
+    };
+    draw();
+    wrap.append(h('div', { class: 'viewer-bar' }, h('button', { class: 'btn sm', type: 'button', onclick: close }, '닫기'), h('div', { class: 'vt' }, res.title, h('small', null, (res.kind === 'retry' ? '오답 다시 보기' : (GT_KIND[res.gkind] || '문법')) + ' · 결과'))), body);
+    document.body.append(wrap); document.body.style.overflow = 'hidden';
+  }
+
+  function gnCard(n) {
+    const q = n.q || {};
+    WT.memo = WT.memo || {};
+    const memo = h('textarea', { class: 'wt-memo', id: 'wn-memo-' + n.id, rows: 2, placeholder: '나만의 정리 메모 (예: whose 뒤엔 명사!)', value: WT.memo[n.id] != null ? WT.memo[n.id] : (n.memo || '') });
+    const saveMemo = async (quiet) => { const v = (WT.memo[n.id] != null ? WT.memo[n.id] : memo.value).trim(); if (v === (n.memo || '')) return; try { await S.db.collection('wrongnotes').doc(n.id).update({ memo: v }); n.memo = v; if (!quiet) toast('메모를 저장했어요'); } catch (e) { toast('메모를 저장하지 못했어요'); } };
+    memo.addEventListener('input', () => { WT.memo[n.id] = memo.value; clearTimeout(WT.mt); WT.mt = setTimeout(() => saveMemo(true), 1200); });
+    memo.addEventListener('change', () => { clearTimeout(WT.mt); saveMemo(false); });
+    return h('article', { class: 'wt-card wn gn' + (n.status === 'done' ? ' done' : '') },
+      h('div', { class: 'row', style: 'align-items:baseline' }, q.tag ? h('span', { class: 'gt-tag' }, q.tag) : null, h('span', { class: 'spacer' }), h('span', { class: 'tag' }, `틀린 횟수 ${n.wrongCount || 1}`)),
+      h('div', { class: 'gt-stem' }, gtText(q.stem)), q.box ? h('div', { class: 'gt-box sm' }, gtText(q.box)) : null,
+      q.kind === 'mc' || q.kind === 'mcm' ? h('div', { class: 'gt-rchoices' }, (q.choices || []).map((c, j) => h('div', { class: (q.kind === 'mc' ? q.answer === j : (q.answer || []).includes(j)) ? 'right' : '' }, CIRC[j], ' ', gtText(c)))) : null,
+      h('div', { class: 'wt-given' }, '내가 쓴 답: ', h('span', { class: 'x' }, gtText(gtGivenText(q, n.lastGiven)))),
+      h('div', { class: 'wt-right' }, '정답: ', h('b', null, gtText(gtAnswerText(q)))),
+      q.explain ? h('details', { class: 'gt-exp' }, h('summary', null, '해설'), h('p', null, gtText(q.explain))) : null,
+      n.status === 'done' ? h('div', { class: 'meta' }, `✅ 이해했어요 · ${fmtDate(n.doneAt)}`) : h('div', { class: 'wt-dots' }, h('span', { class: 'meta' }, '다시 풀기 연속 정답 '), h('i', { class: (n.streak || 0) >= 1 ? 'on' : null }), h('i', { class: (n.streak || 0) >= 2 ? 'on' : null }), h('span', { class: 'meta' }, ' (2번 맞히면 이해한 문제로)')),
+      memo,
+      n.status === 'done' ? h('div', null, h('button', { class: 'btn sm ghost', type: 'button', onclick: () => S.db.collection('wrongnotes').doc(n.id).update({ status: 'open', streak: 0 }).catch(() => toast('바꾸지 못했어요')) }, '다시 오답노트로')) : null);
+  }
+
+  function grammarSection() {
+    const tests = S.gramtests.slice().sort((a, b) => (a.order || 0) - (b.order || 0) || String(a.title).localeCompare(String(b.title), 'ko', { numeric: true }));
+    const results = S.testresults.filter(r => r.type === 'grammar').sort((a, b) => (b.finishedAt || 0) - (a.finishedAt || 0));
+    const full = results.filter(r => r.kind === 'full');
+    const notes = S.wrongnotes.filter(n => n.type === 'grammar'), open = notes.filter(n => n.status !== 'done').sort((a, b) => (b.wrongCount || 0) - (a.wrongCount || 0) || (b.lastWrongAt || 0) - (a.lastWrongAt || 0)), done = notes.filter(n => n.status === 'done');
+    const rewarded = wtRewardedIds();
+    const pend = S.canEdit ? results.filter(r => r.check > 0) : [];
+    const tabs = h('div', { class: 'seg' }, [['tests', '시험지'], ['notes', `오답노트 ${open.length || ''}`], ['stats', '기록·통계']].map(([k, l]) => h('button', { type: 'button', 'aria-pressed': String(GT.tab === k), onclick: () => { GT.tab = k; render(); } }, l.trim())));
+    let main;
+    if (GT.tab === 'tests') {
+      const groups = [...new Set(tests.map(x => [x.book, x.chapter].filter(Boolean).join(' · ') || '문법'))];
+      main = tests.length ? groups.map(g => h('section', { class: 'panel' }, h('div', { class: 'panel-head' }, h('h2', null, g)),
+        h('div', { class: 'wt-grid' }, tests.filter(x => ([x.book, x.chapter].filter(Boolean).join(' · ') || '문법') === g).map(x => {
+          const rs = full.filter(r => r.testId === x.id), best = rs.length ? Math.max(...rs.map(r => r.score)) : null, draft = store.get('ain-gt-draft-' + x.id, null);
+          const filledN = draft && draft.answers ? (x.questions || []).filter(q => gtFilled(q, draft.answers[q.id])).length : 0;
+          return h('article', { class: 'wt-card' },
+            h('div', { class: 'row', style: 'align-items:baseline' }, h('span', { class: 'gt-kind ' + (x.kind || '') }, GT_KIND[x.kind] || '문법'), h('span', { class: 'spacer' }), rewarded.has(x.id) ? h('span', { class: 'tag' }, '🌰 받음') : null),
+            h('b', null, x.title), x.desc ? h('div', { class: 'meta' }, x.desc) : null,
+            h('div', { class: 'meta' }, [`${(x.questions || []).length}문제`, x.minutes ? `약 ${x.minutes}분` : null, rs.length ? `${rs.length}번 응시` : '아직 안 풀었어요', best != null ? `최고 ${best}점` : null].filter(Boolean).join(' · ')),
+            h('div', { class: 'row' },
+              h('button', { class: 'btn primary', type: 'button', onclick: () => openGrammarTest(x) }, icon('i-pen'), filledN ? `이어서 풀기 (${filledN}/${(x.questions || []).length})` : '시험 보기'),
+              rs.length ? h('button', { class: 'btn sm ghost', type: 'button', onclick: () => openGrammarResult(rs[0]) }, '최근 결과') : null,
+              S.canEdit ? h('span', { class: 'spacer' }) : null, S.canEdit ? confirmBtn('삭제', () => S.db.collection('gramtests').doc(x.id).delete().catch(() => toast('지우지 못했어요'))) : null));
+        })))) : h('section', { class: 'panel' }, needDb() || empty('아직 문법 시험지가 없어요', '아빠가 시험지를 올리면 여기에 나와요.', null, '📝'));
+    } else if (GT.tab === 'notes') {
+      const retry = () => { const pick = shuffle(open).slice(0, 20); openGrammarTest({ id: 'retry-grammar', title: '문법 오답 다시 풀기', questions: pick.map((n, i) => ({ ...n.q, id: 'r' + i, noteId: n.id })) }, true); };
+      main = [h('section', { class: 'panel' },
+        h('div', { class: 'panel-head' }, h('h2', null, '📒 문법 오답노트'), h('span', { class: 'meta' }, `다시 볼 문제 ${open.length}개 · 이해한 문제 ${done.length}개`)),
+        open.length ? h('div', { class: 'row' }, h('button', { class: 'btn primary', type: 'button', onclick: retry }, icon('i-pen'), `오답만 다시 풀기 (${Math.min(open.length, 20)}문제)`), h('span', { class: 'meta' }, '다시 풀기에서 연속 2번 맞히면 이해한 문제로 넘어가요.')) : null,
+        needDb() || (open.length ? h('div', { class: 'gn-list' }, open.map(gnCard)) : empty(notes.length ? '오답노트를 모두 정리했어요!' : '아직 틀린 문제가 없어요', notes.length ? '대단해요. 새 시험지에 도전해 봐요.' : '시험에서 틀린 문제가 해설과 함께 여기에 모여요.', null, '🎉'))),
+        done.length ? h('details', { class: 'panel' }, h('summary', null, h('b', null, `✅ 이해한 문제 ${done.length}개`)), h('div', { class: 'gn-list', style: 'margin-top:12px' }, done.map(gnCard))) : null];
+    } else {
+      const avg = full.length ? Math.round(full.reduce((a, r) => a + r.score, 0) / full.length) : null, best = full.length ? Math.max(...full.map(r => r.score)) : null;
+      const trend = wtTrend(full.slice(0, 20).reverse());
+      // 문법 포인트별 정답률
+      const byTag = {}; full.forEach(r => r.answers.forEach(a => { const t = (a.q && a.q.tag) || '기타'; byTag[t] = byTag[t] || [0, 0]; byTag[t][1]++; if (a.ok === 'ok') byTag[t][0]++; }));
+      const tagRows = Object.entries(byTag).map(([t, [c, n]]) => ({ t, c, n, p: Math.round(c / n * 100) })).sort((a, b) => a.p - b.p);
+      main = [h('section', { class: 'panel' }, h('div', { class: 'panel-head' }, h('h2', null, '📈 문법 시험 기록')),
+          h('div', { class: 'wt-kpis' },
+            h('div', { class: 'wt-kpi' }, h('span', null, '시험 본 횟수'), h('b', null, full.length), h('small', null, results.length - full.length ? `오답 다시 풀기 ${results.length - full.length}번` : '')),
+            h('div', { class: 'wt-kpi' }, h('span', null, '평균 점수'), h('b', null, avg != null ? avg + '점' : '–')),
+            h('div', { class: 'wt-kpi' }, h('span', null, '최고 점수'), h('b', null, best != null ? best + '점' : '–')),
+            h('div', { class: 'wt-kpi' }, h('span', null, '받은 도토리'), h('b', null, '🌰 ' + new Set(full.filter(wtQualifies).map(r => r.testId)).size)),
+            h('div', { class: 'wt-kpi' }, h('span', null, '오답노트'), h('b', null, open.length), h('small', null, `이해한 문제 ${done.length}개`))),
+          trend ? h('div', null, h('div', { class: 'meta' }, '최근 점수 추이 (노란 선이 95점)'), trend) : h('p', { class: 'meta' }, '시험을 2번 이상 보면 점수 추이 그래프가 나와요.')),
+        tagRows.length ? h('section', { class: 'panel' }, h('div', { class: 'panel-head' }, h('h2', null, '문법 포인트별 정답률'), h('span', { class: 'meta' }, '낮은 것부터')),
+          h('div', { class: 'gt-bars' }, tagRows.map(r => h('div', { class: 'gt-bar' }, h('span', null, r.t), h('div', { class: 'gt-track' }, h('i', { style: `width:${r.p}%`, class: r.p < 60 ? 'low' : r.p < 85 ? 'mid' : '' })), h('b', null, `${r.p}%`), h('small', null, `${r.c}/${r.n}`))))) : null,
+        results.length ? h('section', { class: 'panel' }, h('div', { class: 'panel-head' }, h('h2', null, '최근 시험')),
+          h('div', { class: 'list' }, results.slice(0, 15).map(r => h('button', { class: 'wt-hist', type: 'button', onclick: () => openGrammarResult(r) },
+            h('b', null, r.score + '점'), h('span', null, r.title), h('span', { class: 'meta' }, [fmtDate(r.finishedAt), r.kind === 'retry' ? '오답 다시 풀기' : GT_KIND[r.gkind], r.by && r.by !== 'ain' ? WHO[r.by] : null, r.check ? `확인 필요 ${r.check}` : null].filter(Boolean).join(' · ')), wtQualifies(r) ? h('span', null, '🌰') : null)))) : null];
+    }
+    return [
+      pend.length ? h('section', { class: 'panel wt-pend' }, h('div', { class: 'panel-head' }, h('h2', null, '❔ 아빠가 확인할 답'), h('span', { class: 'meta' }, `${pend.reduce((a, r) => a + r.check, 0)}개`)),
+        h('div', { class: 'list' }, pend.slice(0, 8).map(r => h('button', { class: 'wt-hist', type: 'button', onclick: () => openGrammarResult(r) }, h('b', null, r.score + '점'), h('span', null, r.title), h('span', { class: 'meta' }, `${fmtDate(r.finishedAt)} · 확인 필요 ${r.check}개`))))) : null,
+      h('div', { class: 'row', style: 'justify-content:flex-end' }, tabs),
+      main];
+  }
+
+  function wordSection() {
     const t = wtType(WT.type);
     const tests = S.wordtests.filter(x => x.type === t.id).sort((a, b) => (a.order || 0) - (b.order || 0) || String(a.title).localeCompare(String(b.title), 'ko', { numeric: true }));
     const results = S.testresults.filter(r => r.type === t.id).sort((a, b) => (b.finishedAt || 0) - (a.finishedAt || 0));
     const full = results.filter(r => r.kind === 'full');
     const notes = S.wrongnotes.filter(n => n.type === t.id), open = notes.filter(n => n.status !== 'done').sort((a, b) => (b.wrongCount || 0) - (a.wrongCount || 0) || (b.lastWrongAt || 0) - (a.lastWrongAt || 0)), done = notes.filter(n => n.status === 'done');
     const rewarded = wtRewardedIds();
-    const pend = S.canEdit ? S.testresults.filter(r => r.check > 0).sort((a, b) => (b.finishedAt || 0) - (a.finishedAt || 0)) : [];
+    const pend = S.canEdit ? S.testresults.filter(r => r.check > 0 && (r.type === 'toefl' || r.type === 'voca')).sort((a, b) => (b.finishedAt || 0) - (a.finishedAt || 0)) : [];
     const typeSeg = h('div', { class: 'chips' }, WT_TYPES.map(x => chip(x.id, x.name, null, S.wordtests.filter(w => w.type === x.id).length, x.id === t.id, () => { WT.type = x.id; store.set('ain-wt-type', x.id); render(); })));
     const tabs = h('div', { class: 'seg' }, [['tests', '시험지'], ['notes', `오답노트 ${open.length || ''}`], ['stats', '기록·통계']].map(([k, l]) => h('button', { type: 'button', 'aria-pressed': String(WT.tab === k), onclick: () => { WT.tab = k; render(); } }, l.trim())));
     let main;
@@ -2751,12 +3061,24 @@ input.wt-in { font-size: 18px; min-height: 48px; padding: 10px 12px; width: 100%
           h('div', { class: 'list' }, results.slice(0, 15).map(r => h('button', { class: 'wt-hist', type: 'button', onclick: () => openWordResult(r) },
             h('b', null, r.score + '점'), h('span', null, r.title), h('span', { class: 'meta' }, [fmtDate(r.finishedAt), r.kind === 'retry' ? '오답 다시 보기' : null, r.by && r.by !== 'ain' ? WHO[r.by] : null, r.check ? `확인 필요 ${r.check}` : null].filter(Boolean).join(' · ')), wtQualifies(r) ? h('span', null, '🌰') : null)))) : null];
     }
-    return h('div', { class: 'page' },
-      pageHead('공부', '단어 시험', 'TOEFL 단어는 단어를 보고 뜻을, 능률 VOCA는 뜻을 보고 스펠링을 적어요. 정답률 95% 이상이면 도토리 1개!'),
+    return [h('p', { class: 'meta' }, 'TOEFL 단어는 단어를 보고 뜻을, 능률 VOCA는 뜻을 보고 스펠링을 적어요.'),
       pend.length ? h('section', { class: 'panel wt-pend' }, h('div', { class: 'panel-head' }, h('h2', null, '❔ 아빠가 확인할 답'), h('span', { class: 'meta' }, `${pend.reduce((a, r) => a + r.check, 0)}개`)),
         h('div', { class: 'list' }, pend.slice(0, 8).map(r => h('button', { class: 'wt-hist', type: 'button', onclick: () => openWordResult(r) }, h('b', null, r.score + '점'), h('span', null, r.title), h('span', { class: 'meta' }, `${fmtDate(r.finishedAt)} · 확인 필요 ${r.check}개`))))) : null,
       h('div', { class: 'row', style: 'justify-content:space-between' }, typeSeg, tabs),
-      main);
+      main];
+  }
+  /* ================= 시험창고: 문법 / 독해 / 듣기 / 단어 ================= */
+  const TEST_CATS = [['grammar', '문법', '✏️'], ['reading', '독해', '📖'], ['listening', '듣기', '🎧'], ['word', '단어', '🔤']];
+  WT.cat = store.get('ain-test-cat', 'grammar');
+  VIEWS.wordtest = () => {
+    if (!TEST_CATS.some(c => c[0] === WT.cat)) WT.cat = 'grammar';
+    const cats = h('div', { class: 'tc-tabs', role: 'tablist' }, TEST_CATS.map(([k, l, e]) => h('button', { type: 'button', role: 'tab', 'aria-selected': String(WT.cat === k), class: 'tc-tab', onclick: () => { WT.cat = k; store.set('ain-test-cat', k); render(); } },
+      h('span', { 'aria-hidden': 'true' }, e), l, k === 'grammar' && S.gramtests.length ? h('small', null, S.gramtests.length) : k === 'word' && S.wordtests.length ? h('small', null, S.wordtests.length) : null)));
+    const body = WT.cat === 'grammar' ? grammarSection() : WT.cat === 'word' ? wordSection()
+      : h('section', { class: 'panel' }, empty(WT.cat === 'reading' ? '독해 시험은 준비 중이에요' : '듣기 시험은 준비 중이에요', '아빠가 시험을 만들면 여기에 나와요.', null, WT.cat === 'reading' ? '📖' : '🎧'));
+    return h('div', { class: 'page' },
+      pageHead('공부', '시험창고', '문법·독해·듣기·단어 시험을 보고 자동으로 채점해요. 틀린 문제는 오답노트에 모이고, 정답률 95% 이상이면 도토리 1개!'),
+      cats, body);
   };
 
   VIEWS.rest = () => {
@@ -3011,7 +3333,7 @@ input.wt-in { font-size: 18px; min-height: 48px; padding: 10px 12px; width: 100%
     S.db = db; S.assets = assets; S.downloads = downloads;
     try { S.canEdit = !!(user && await user.canEdit()); } catch (e) { S.canEdit = false; }
     if (!db) { render(); return; }
-    const COLS = ['subjects', 'materials', 'backgrounds', 'vocabsets', 'stories', 'broadcasts', 'articles', 'bookpicks', 'mybooks', 'home', 'homeitems', 'homechat', 'homegreet', 'playlists', 'homework', 'logs', 'words', 'wordtests', 'testresults', 'wrongnotes'];
+    const COLS = ['subjects', 'materials', 'backgrounds', 'vocabsets', 'stories', 'broadcasts', 'articles', 'bookpicks', 'mybooks', 'home', 'homeitems', 'homechat', 'homegreet', 'playlists', 'homework', 'logs', 'words', 'wordtests', 'gramtests', 'testresults', 'wrongnotes'];
     COLS.forEach(c => db.collection(c).onSnapshot(snap => { S[c] = snap.docs.map(d => ({ ...d.data(), id: d.id })); queueRender(); }, () => {}));
     render();
   })();
