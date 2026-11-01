@@ -563,7 +563,9 @@ nav.tabbar button[aria-current="page"] { color: var(--accent); }
 @media (prefers-reduced-motion: reduce) { .mh-eq.on i { animation: none; height: 10px; } }
 .mh-acorn { font-weight: 700; }
 .mh-stage { background: var(--surface); border-radius: 16px; overflow: hidden; border: 1px solid var(--line); }
-.mh-home { gap: 10px; }
+.mh-home { gap: 10px; grid-template-columns: minmax(0, 1fr); }
+.mh-home-stage { min-width: 0; }
+.mh-home-svg { max-width: 100%; }
 .mh-home-stage { border-radius: 16px; overflow: hidden; background: linear-gradient(180deg, #CFE6F2, #EAF3E8); border: 1px solid var(--line); cursor: pointer; }
 .mh-home-svg { max-height: 440px; }
 .mh-home-bgm { max-width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
