@@ -829,6 +829,8 @@ textarea.gt-in { min-height: 72px; resize: vertical; }
   const SB_URL = 'https://gtboiiedozrgemoebtdz.supabase.co';
   const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0Ym9paWVkb3pyZ2Vtb2VidGR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0NzE2NDIsImV4cCI6MjEwODA0NzY0Mn0.SirPDQ_gtyHWnuGDrahgHKmT9h8BOU6ztdsHAedcm5s';
   const BUCKET = 'files';
+  // 비밀번호 재설정 메일의 링크로 들어왔는지 (클라이언트가 주소의 토큰을 지우기 전에 확인)
+  const RECOVERY = /type=recovery/.test(location.hash + location.search);
   const sb = window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, storageKey: 'ain-auth' } });
 
   const AIN = window.AIN = { sb, member: null, isAdmin: false, email: '' };
@@ -966,6 +968,9 @@ textarea.gt-in { min-height: 72px; resize: vertical; }
   .ain-card input{-webkit-user-select:text;user-select:text;-webkit-appearance:none;appearance:none;pointer-events:auto;font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;border:1px solid var(--line,#ccc);background:var(--bg,#fff);color:var(--ink,#222)}
   .ain-card button{font:inherit;font-size:16px;padding:13px;border-radius:999px;border:0;background:var(--accent,#3E7560);color:var(--accent-ink,#fff);cursor:pointer}
   .ain-card button[disabled]{opacity:.6}
+  .ain-card .link{background:none;color:var(--muted,#666);font-size:13.5px;padding:4px;text-decoration:underline;text-underline-offset:3px}
+  .ain-card .ghost{background:var(--sunken,#eee);color:var(--ink,#222)}
+  .ain-card .msg.ok{color:var(--accent,#3E7560)}
   .ain-card .msg{min-height:20px;font-size:13.5px;color:var(--danger,#C2554A);text-align:center}
   .ain-who{position:fixed;right:12px;bottom:calc(env(safe-area-inset-bottom) + 76px);z-index:50}
   @media (min-width:900px){.ain-who{bottom:14px}}
@@ -979,9 +984,19 @@ textarea.gt-in { min-height: 72px; resize: vertical; }
       g.innerHTML = `<form class="ain-card" autocomplete="on"><div class="mark">아</div><h1>아인이 공부방</h1><p>우리 가족만 들어올 수 있어요.<br>이메일과 비밀번호로 로그인해 주세요.</p>
         <label>이메일<input name="email" type="email" autocomplete="username" required></label>
         <label>비밀번호<input name="pw" type="password" autocomplete="current-password" required></label>
-        <div class="msg" role="status"></div><button type="submit">들어가기</button></form>`;
+        <div class="msg" role="status"></div><button type="submit">들어가기</button>
+        <button type="button" class="link" data-forgot>비밀번호를 잊었어요</button></form>`;
       document.body.append(g);
       const f = g.querySelector('form');
+      g.querySelector('[data-forgot]').addEventListener('click', async () => {
+        const m = f.querySelector('.msg'), email = f.email.value.trim(); m.classList.remove('ok');
+        if (!email) { m.textContent = '위 칸에 이메일을 먼저 적고 다시 눌러 주세요.'; f.email.focus(); return; }
+        const b = g.querySelector('[data-forgot]'); b.disabled = true; m.textContent = '메일을 보내는 중…';
+        const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname });
+        b.disabled = false;
+        if (error) { m.textContent = /rate|seconds|limit/i.test(error.message || '') ? '방금 보냈어요. 1분쯤 뒤에 다시 눌러 주세요.' : '메일을 보내지 못했어요. 이메일 주소를 확인해 주세요.'; return; }
+        m.classList.add('ok'); m.textContent = '재설정 메일을 보냈어요. 메일 속 링크를 눌러 새 비밀번호를 정해 주세요. (스팸함도 확인해 주세요)';
+      });
       f.addEventListener('submit', async (e) => {
         e.preventDefault(); const b = f.querySelector('button'); const m = f.querySelector('.msg');
         b.disabled = true; m.textContent = '';
@@ -994,18 +1009,60 @@ textarea.gt-in { min-height: 72px; resize: vertical; }
     g.querySelector('.msg').textContent = msg || '';
     // 아이폰 홈 화면 앱에서는 코드로 미리 포커스를 주면 이후 눌러도 키보드가 안 뜨는 문제가 있어 자동 포커스를 하지 않음
   }
+  /* 새 비밀번호 정하기: mode 'recovery'(메일 링크로 들어옴) | 'change'(로그인한 상태에서 바꾸기) */
+  function newPassword(mode) {
+    document.querySelectorAll('.ain-gate').forEach(x => x.remove());
+    const g = document.createElement('div'); g.className = 'ain-gate';
+    g.innerHTML = `<form class="ain-card" autocomplete="on"><div class="mark">아</div><h1>새 비밀번호 정하기</h1>
+      <p>${mode === 'recovery' ? '앞으로 쓸 새 비밀번호를 정해 주세요.' : '지금 로그인한 계정의 비밀번호를 바꿔요.'}<br>6자 이상으로 적어 주세요.</p>
+      <input type="email" name="username" autocomplete="username" value="${(AIN.email || '').replace(/"/g, '')}" hidden>
+      <label>새 비밀번호<input name="pw" type="password" autocomplete="new-password" minlength="6" required></label>
+      <label>한 번 더<input name="pw2" type="password" autocomplete="new-password" minlength="6" required></label>
+      <div class="msg" role="status"></div><button type="submit">비밀번호 바꾸기</button>
+      ${mode === 'change' ? '<button type="button" class="ghost" data-close>닫기</button>' : ''}</form>`;
+    document.body.append(g);
+    const f = g.querySelector('form'), m = f.querySelector('.msg');
+    const c = g.querySelector('[data-close]'); if (c) c.onclick = () => g.remove();
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault(); m.classList.remove('ok');
+      if (f.pw.value.length < 6) { m.textContent = '6자 이상으로 적어 주세요.'; return; }
+      if (f.pw.value !== f.pw2.value) { m.textContent = '두 칸의 비밀번호가 서로 달라요.'; return; }
+      const b = f.querySelector('button[type=submit]'); b.disabled = true; m.textContent = '바꾸는 중…';
+      const { error } = await sb.auth.updateUser({ password: f.pw.value });
+      b.disabled = false;
+      if (error) {
+        const t = error.message || '';
+        m.textContent = /different|same/i.test(t) ? '지금 쓰는 비밀번호와 다른 비밀번호로 정해 주세요.' : /weak|short|least/i.test(t) ? '조금 더 길거나 복잡한 비밀번호로 정해 주세요.' : /session|expired|jwt|token/i.test(t) ? '링크가 만료됐어요. 로그인 화면에서 "비밀번호를 잊었어요"를 다시 눌러 주세요.' : '바꾸지 못했어요. 잠시 뒤 다시 시도해 주세요.';
+        return;
+      }
+      m.classList.add('ok'); m.textContent = '비밀번호를 바꿨어요! 다음부터는 새 비밀번호로 로그인해요.';
+      setTimeout(() => { if (mode === 'recovery') { history.replaceState(null, '', location.pathname); location.reload(); } else g.remove(); }, 1600);
+    });
+  }
+  AIN.changePassword = () => newPassword('change');
+  sb.auth.onAuthStateChange((ev) => { if (ev === 'PASSWORD_RECOVERY' && !document.querySelector('.ain-gate input[name=pw2]')) newPassword('recovery'); });
   AIN.signOut = async () => { try { await sb.auth.signOut(); } catch (e) {} try { localStorage.removeItem('ain-member'); } catch (e) {} location.reload(); };
   function whoChip() {
     const w = document.createElement('div'); w.className = 'ain-who';
     const b = document.createElement('button'); b.type = 'button'; b.textContent = (NAMES[AIN.member] || '') + ' · 로그아웃';
-    b.onclick = () => { if (confirm('로그아웃할까요?')) AIN.signOut(); };
+    b.onclick = () => {
+      const g = document.createElement('div'); g.className = 'ain-gate';
+      g.innerHTML = `<div class="ain-card"><div class="mark">아</div><h1>${NAMES[AIN.member] || ''} 계정</h1><p>${(AIN.email || '').replace(/</g, '&lt;')}</p>
+        <button type="button" data-pw>비밀번호 바꾸기</button><button type="button" class="ghost" data-out>로그아웃</button><button type="button" class="link" data-close>닫기</button></div>`;
+      g.addEventListener('click', (e) => { if (e.target === g) g.remove(); });
+      g.querySelector('[data-close]').onclick = () => g.remove();
+      g.querySelector('[data-out]').onclick = () => AIN.signOut();
+      g.querySelector('[data-pw]').onclick = () => newPassword('change');
+      document.body.append(g);
+    };
     w.append(b); document.body.append(w);
   }
   (async () => {
     const { data } = await sb.auth.getSession();
     const session = data && data.session;
-    if (!session) { gate(); return; }
+    if (!session) { gate(RECOVERY ? '재설정 링크가 만료됐거나 이미 사용됐어요. 아래 "비밀번호를 잊었어요"를 다시 눌러 주세요.' : ''); return; }
     AIN.email = session.user.email || '';
+    if (RECOVERY) { newPassword('recovery'); return; }
     const { data: fam, error } = await sb.from('family').select('member,is_admin').eq('email', AIN.email.toLowerCase()).maybeSingle();
     if (error || !fam) { gate(error ? '연결이 불안정해요. 잠시 뒤 다시 시도해 주세요.' : '가족 명단에 없는 계정이에요. 아빠에게 말해 주세요.'); if (!error) await sb.auth.signOut(); return; }
     AIN.member = fam.member; AIN.isAdmin = !!fam.is_admin; AIN.ready = true;
