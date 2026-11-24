@@ -3051,6 +3051,35 @@ textarea.gt-in { min-height: 72px; resize: vertical; }
       n.status === 'done' ? h('div', null, h('button', { class: 'btn sm ghost', type: 'button', onclick: () => S.db.collection('wrongnotes').doc(n.id).update({ status: 'open', streak: 0 }).catch(() => toast('바꾸지 못했어요')) }, '다시 오답노트로')) : null);
   }
 
+  /* ---------- 이번 주 시험 / 본 시험 나누기 ----------
+     한 주 = 토요일~금요일 (주말에 올린 시험은 다음 주 학원 시험용).
+     기준 날짜 = due(있으면) → date → 만든 시각. 한 번이라도 끝까지 본 시험은 '본 시험'으로 간다. */
+  const tsWeekStart = (t) => { const x = new Date(t); x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - ((x.getDay() + 1) % 7)); return x.getTime(); };
+  const tsDay = (x) => { const m = String(x.due || x.date || '').match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? new Date(+m[1], m[2] - 1, +m[3]).getTime() : (x.createdAt || 0); };
+  const tsTaken = (x) => S.testresults.some(r => r.testId === x.id && r.kind === 'full');
+  const tsThisWeek = (x) => tsDay(x) >= tsWeekStart(Date.now());
+  const tsTodo = (tests) => tests.filter(x => !tsTaken(x) && tsThisWeek(x)).length;
+  function tsSplit(tests) {
+    const week = [], done = [], old = [];
+    tests.forEach(x => (tsTaken(x) ? done : tsThisWeek(x) ? week : old).push(x));
+    week.sort((a, b) => tsDay(a) - tsDay(b) || (a.order || 0) - (b.order || 0));
+    done.sort((a, b) => tsDay(b) - tsDay(a) || (b.order || 0) - (a.order || 0));
+    old.sort((a, b) => tsDay(b) - tsDay(a) || (a.order || 0) - (b.order || 0));
+    return { week, done, old, weekDone: done.filter(tsThisWeek).length };
+  }
+  const tsTabs = (cur, setTab, week, open) => h('div', { class: 'seg' }, [['tests', `이번 주${week ? ' ' + week : ''}`], ['done', '본 시험'], ['notes', `오답노트${open ? ' ' + open : ''}`], ['stats', '기록']].map(([k, l]) => h('button', { type: 'button', 'aria-pressed': String(cur === k), onclick: () => setTab(k) }, l)));
+  // 이번 주 / 본 시험 화면 공통: groupOf(x)로 묶고, card(x, showGroup)로 그린다
+  function tsBody(sp, tab, groupOf, card, emptyAll) {
+    const grid = (list, showGroup) => h('div', { class: 'wt-grid' }, list.map(x => card(x, showGroup)));
+    const grouped = (list) => [...new Set(list.map(groupOf))].map(g => h('section', { class: 'panel' }, h('div', { class: 'panel-head' }, h('h2', null, g), h('span', { class: 'meta' }, `${list.filter(x => groupOf(x) === g).length}개`)), grid(list.filter(x => groupOf(x) === g), false)));
+    if (!sp.week.length && !sp.done.length && !sp.old.length) return emptyAll;
+    if (tab === 'done') return sp.done.length ? grouped(sp.done) : h('section', { class: 'panel' }, empty('아직 본 시험이 없어요', '시험을 끝까지 보면 여기로 옮겨져요.', null, '📚'));
+    return [h('section', { class: 'panel' },
+        h('div', { class: 'panel-head' }, h('h2', null, '📌 이번 주에 볼 시험'), h('span', { class: 'meta' }, sp.week.length ? `${sp.week.length}개 남았어요` : '')),
+        sp.week.length ? grid(sp.week, true) : empty(sp.weekDone ? '이번 주 시험을 모두 봤어요!' : '이번 주에 볼 시험이 아직 없어요', sp.weekDone ? '본 시험은 ‘본 시험’ 탭에서 다시 볼 수 있어요.' : '아빠가 시험지를 올리면 여기에 나와요.', null, sp.weekDone ? '🎉' : '📝'),
+        sp.week.length && sp.weekDone ? h('p', { class: 'meta' }, `이번 주에 이미 본 시험 ${sp.weekDone}개는 ‘본 시험’ 탭에 있어요.`) : null),
+      sp.old.length ? h('details', { class: 'panel' }, h('summary', null, h('b', null, `지난 시험 중 아직 안 본 것 ${sp.old.length}개`)), h('div', { style: 'margin-top:12px' }, grid(sp.old, true))) : null];
+  }
   function grammarSection() {
     const tests = S.gramtests.slice().sort((a, b) => (a.order || 0) - (b.order || 0) || String(a.title).localeCompare(String(b.title), 'ko', { numeric: true }));
     const results = S.testresults.filter(r => r.type === 'grammar').sort((a, b) => (b.finishedAt || 0) - (a.finishedAt || 0));
@@ -3058,23 +3087,24 @@ textarea.gt-in { min-height: 72px; resize: vertical; }
     const notes = S.wrongnotes.filter(n => n.type === 'grammar'), open = notes.filter(n => n.status !== 'done').sort((a, b) => (b.wrongCount || 0) - (a.wrongCount || 0) || (b.lastWrongAt || 0) - (a.lastWrongAt || 0)), done = notes.filter(n => n.status === 'done');
     const rewarded = wtRewardedIds();
     const pend = S.canEdit ? results.filter(r => r.check > 0) : [];
-    const tabs = h('div', { class: 'seg' }, [['tests', '시험지'], ['notes', `오답노트 ${open.length || ''}`], ['stats', '기록·통계']].map(([k, l]) => h('button', { type: 'button', 'aria-pressed': String(GT.tab === k), onclick: () => { GT.tab = k; render(); } }, l.trim())));
+    const gsp = tsSplit(tests);
+    const tabs = tsTabs(GT.tab, (k) => { GT.tab = k; render(); }, gsp.week.length, open.length);
     let main;
-    if (GT.tab === 'tests') {
-      const groups = [...new Set(tests.map(x => [x.book, x.chapter].filter(Boolean).join(' · ') || '문법'))];
-      main = tests.length ? groups.map(g => h('section', { class: 'panel' }, h('div', { class: 'panel-head' }, h('h2', null, g)),
-        h('div', { class: 'wt-grid' }, tests.filter(x => ([x.book, x.chapter].filter(Boolean).join(' · ') || '문법') === g).map(x => {
+    if (GT.tab === 'tests' || GT.tab === 'done') {
+      const gOf = (x) => [x.book, x.chapter].filter(Boolean).join(' · ') || '문법';
+      const gCard = (x, showGroup) => {
           const rs = full.filter(r => r.testId === x.id), best = rs.length ? Math.max(...rs.map(r => r.score)) : null, draft = store.get('ain-gt-draft-' + x.id, null);
           const filledN = draft && draft.answers ? (x.questions || []).filter(q => gtFilled(q, draft.answers[q.id])).length : 0;
           return h('article', { class: 'wt-card' },
             h('div', { class: 'row', style: 'align-items:baseline' }, h('span', { class: 'gt-kind ' + (x.kind || '') }, GT_KIND[x.kind] || '문법'), h('span', { class: 'spacer' }), rewarded.has(x.id) ? h('span', { class: 'tag' }, '🌰 받음') : null),
-            h('b', null, x.title), x.desc ? h('div', { class: 'meta' }, x.desc) : null,
-            h('div', { class: 'meta' }, [`${(x.questions || []).length}문제`, x.minutes ? `약 ${x.minutes}분` : null, rs.length ? `${rs.length}번 응시` : '아직 안 풀었어요', best != null ? `최고 ${best}점` : null].filter(Boolean).join(' · ')),
+            h('b', null, x.title), showGroup ? h('div', { class: 'meta' }, gOf(x)) : null, x.desc ? h('div', { class: 'meta' }, x.desc) : null,
+            h('div', { class: 'meta' }, [fmtDate(tsDay(x)), `${(x.questions || []).length}문제`, x.minutes ? `약 ${x.minutes}분` : null, rs.length ? `${rs.length}번 응시` : '아직 안 풀었어요', best != null ? `최고 ${best}점` : null].filter(Boolean).join(' · ')),
             h('div', { class: 'row' },
-              h('button', { class: 'btn primary', type: 'button', onclick: () => openGrammarTest(x) }, icon('i-pen'), filledN ? `이어서 풀기 (${filledN}/${(x.questions || []).length})` : '시험 보기'),
+              h('button', { class: 'btn primary', type: 'button', onclick: () => openGrammarTest(x) }, icon('i-pen'), filledN ? `이어서 풀기 (${filledN}/${(x.questions || []).length})` : rs.length ? '다시 보기' : '시험 보기'),
               rs.length ? h('button', { class: 'btn sm ghost', type: 'button', onclick: () => openGrammarResult(rs[0]) }, '최근 결과') : null,
               S.canEdit ? h('span', { class: 'spacer' }) : null, S.canEdit ? confirmBtn('삭제', () => S.db.collection('gramtests').doc(x.id).delete().catch(() => toast('지우지 못했어요'))) : null));
-        })))) : h('section', { class: 'panel' }, needDb() || empty('아직 문법 시험지가 없어요', '아빠가 시험지를 올리면 여기에 나와요.', null, '📝'));
+      };
+      main = tsBody(gsp, GT.tab, gOf, gCard, h('section', { class: 'panel' }, needDb() || empty('아직 문법 시험지가 없어요', '아빠가 시험지를 올리면 여기에 나와요.', null, '📝')));
     } else if (GT.tab === 'notes') {
       const retry = () => { const pick = shuffle(open).slice(0, 20); openGrammarTest({ id: 'retry-grammar', title: '문법 오답 다시 풀기', questions: pick.map((n, i) => ({ ...n.q, id: 'r' + i, noteId: n.id })) }, true); };
       main = [h('section', { class: 'panel' },
@@ -3117,24 +3147,25 @@ textarea.gt-in { min-height: 72px; resize: vertical; }
     const notes = S.wrongnotes.filter(n => n.type === t.id), open = notes.filter(n => n.status !== 'done').sort((a, b) => (b.wrongCount || 0) - (a.wrongCount || 0) || (b.lastWrongAt || 0) - (a.lastWrongAt || 0)), done = notes.filter(n => n.status === 'done');
     const rewarded = wtRewardedIds();
     const pend = S.canEdit ? S.testresults.filter(r => r.check > 0 && (r.type === 'toefl' || r.type === 'voca')).sort((a, b) => (b.finishedAt || 0) - (a.finishedAt || 0)) : [];
-    const typeSeg = h('div', { class: 'chips' }, WT_TYPES.map(x => chip(x.id, x.name, null, S.wordtests.filter(w => w.type === x.id).length, x.id === t.id, () => { WT.type = x.id; store.set('ain-wt-type', x.id); render(); })));
-    const tabs = h('div', { class: 'seg' }, [['tests', '시험지'], ['notes', `오답노트 ${open.length || ''}`], ['stats', '기록·통계']].map(([k, l]) => h('button', { type: 'button', 'aria-pressed': String(WT.tab === k), onclick: () => { WT.tab = k; render(); } }, l.trim())));
+    const typeSeg = h('div', { class: 'chips' }, WT_TYPES.map(x => chip(x.id, x.name, null, tsTodo(S.wordtests.filter(w => w.type === x.id))  || null, x.id === t.id, () => { WT.type = x.id; store.set('ain-wt-type', x.id); render(); })));
+    const wsp = tsSplit(tests);
+    const tabs = tsTabs(WT.tab, (k) => { WT.tab = k; render(); }, wsp.week.length, open.length);
     let main;
-    if (WT.tab === 'tests') {
-      const books = [...new Set(tests.map(x => x.book || t.name))];
-      main = tests.length ? books.map(b => h('section', { class: 'panel' }, h('div', { class: 'panel-head' }, h('h2', null, b), h('span', { class: 'meta' }, t.ask)),
-        h('div', { class: 'wt-grid' }, tests.filter(x => (x.book || t.name) === b).map(x => {
+    if (WT.tab === 'tests' || WT.tab === 'done') {
+      const wCard = (x, showGroup) => {
           const rs = full.filter(r => r.testId === x.id), best = rs.length ? Math.max(...rs.map(r => r.score)) : null, draft = store.get(wtDraftKey(x.id), null);
           const filledN = draft && draft.answers ? Object.values(draft.answers).filter(v => String(v).trim()).length : 0;
           return h('article', { class: 'wt-card' },
             h('div', { class: 'row', style: 'align-items:baseline' }, h('b', null, x.title), h('span', { class: 'spacer' }), rewarded.has(x.id) ? h('span', { class: 'tag', title: '95% 이상 달성' }, '🌰 받음') : null),
+            showGroup ? h('div', { class: 'meta' }, x.book || t.name) : null,
             WT_MODE[x.mode] ? h('div', null, h('span', { class: 'wt-modetag ' + x.mode }, (x.mode === 'blank' ? '✏️ ' : '📝 ') + WT_MODE[x.mode].name), h('span', { class: 'meta', style: 'margin-left:6px' }, WT_MODE[x.mode].ask)) : null,
-            h('div', { class: 'meta' }, [`${(x.items || []).length}문제`, rs.length ? `${rs.length}번 응시` : '아직 안 풀었어요', best != null ? `최고 ${best}점` : null].filter(Boolean).join(' · ')),
+            h('div', { class: 'meta' }, [fmtDate(tsDay(x)), `${(x.items || []).length}문제`, rs.length ? `${rs.length}번 응시` : '아직 안 풀었어요', best != null ? `최고 ${best}점` : null].filter(Boolean).join(' · ')),
             h('div', { class: 'row' },
-              h('button', { class: 'btn primary', type: 'button', onclick: () => openWordTest(x) }, icon('i-pen'), filledN ? `이어서 풀기 (${filledN}/${(x.items || []).length})` : '시험 보기'),
+              h('button', { class: 'btn primary', type: 'button', onclick: () => openWordTest(x) }, icon('i-pen'), filledN ? `이어서 풀기 (${filledN}/${(x.items || []).length})` : rs.length ? '다시 보기' : '시험 보기'),
               rs.length ? h('button', { class: 'btn sm ghost', type: 'button', onclick: () => openWordResult(rs[0]) }, '최근 결과') : null,
               S.canEdit ? h('span', { class: 'spacer' }) : null, S.canEdit ? confirmBtn('삭제', () => S.db.collection('wordtests').doc(x.id).delete().catch(() => toast('지우지 못했어요'))) : null));
-        })))) : h('section', { class: 'panel' }, needDb() || empty('아직 시험지가 없어요', S.canEdit ? '시험지(단어장) 사진을 직원에게 보내 주시면 시험지로 만들어 올려 드려요.' : '아빠가 시험지를 올리면 여기에 나와요.', null, '📝'));
+      };
+      main = tsBody(wsp, WT.tab, (x) => x.book || t.name, wCard, h('section', { class: 'panel' }, needDb() || empty('아직 시험지가 없어요', S.canEdit ? '시험지(단어장) 사진을 직원에게 보내 주시면 시험지로 만들어 올려 드려요.' : '아빠가 시험지를 올리면 여기에 나와요.', null, '📝')));
     } else if (WT.tab === 'notes') {
       const retry = () => { const pick = shuffle(open).slice(0, 30); openWordTest({ id: 'retry-' + t.id, type: t.id, title: `${t.name} 오답 다시 보기`, items: pick.map(n => ({ word: n.word, ko: n.ko, accept: n.accept, noteId: n.id, ...(n.ex && n.mode && n.mode !== 'meaning' ? { mode: n.mode, ex: n.ex, exKo: n.exKo || '' } : {}) })) }, true); };
       main = [h('section', { class: 'panel' },
@@ -3178,7 +3209,7 @@ textarea.gt-in { min-height: 72px; resize: vertical; }
   VIEWS.wordtest = () => {
     if (!TEST_CATS.some(c => c[0] === WT.cat)) WT.cat = 'grammar';
     const cats = h('div', { class: 'tc-tabs', role: 'tablist' }, TEST_CATS.map(([k, l, e]) => h('button', { type: 'button', role: 'tab', 'aria-selected': String(WT.cat === k), class: 'tc-tab', onclick: () => { WT.cat = k; store.set('ain-test-cat', k); render(); } },
-      h('span', { 'aria-hidden': 'true' }, e), l, k === 'grammar' && S.gramtests.length ? h('small', null, S.gramtests.length) : k === 'word' && S.wordtests.length ? h('small', null, S.wordtests.length) : null)));
+      h('span', { 'aria-hidden': 'true' }, e), l, (k === 'grammar' ? tsTodo(S.gramtests) : k === 'word' ? tsTodo(S.wordtests) : 0) ? h('small', { title: '이번 주에 볼 시험' }, k === 'grammar' ? tsTodo(S.gramtests) : tsTodo(S.wordtests)) : null)));
     const body = WT.cat === 'grammar' ? grammarSection() : WT.cat === 'word' ? wordSection()
       : h('section', { class: 'panel' }, empty(WT.cat === 'reading' ? '독해 시험은 준비 중이에요' : '듣기 시험은 준비 중이에요', '아빠가 시험을 만들면 여기에 나와요.', null, WT.cat === 'reading' ? '📖' : '🎧'));
     return h('div', { class: 'page' },
